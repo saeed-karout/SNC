@@ -5,7 +5,7 @@
     <Videos />
     <StatisticsComponent />
     <Service />
-    <ProjectsComponents />
+    <!-- <ProjectsComponents /> -->
     <Carousel />
     <ContactView />
     <profileCompany />

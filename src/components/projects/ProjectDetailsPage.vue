@@ -257,7 +257,7 @@ watch(locale, () => {
     overflow-y: auto;
     --sb-track-color: #34505d;
     --sb-thumb-color: #314351;
-    --sb-size: 2px;
+    --sb-size: 5px;
 }
 
 .fixedSidebar::-webkit-scrollbar {
@@ -284,7 +284,7 @@ watch(locale, () => {
 :root {
     --sb-track-color: #c7a887;
     --sb-thumb-color: #314351;
-    --sb-size: 5px;
+    --sb-size: 5px; 
 }
 
 /* زر فتح وإغلاق الـ Sidebar */

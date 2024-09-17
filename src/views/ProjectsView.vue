@@ -1,10 +1,8 @@
 <template>
   <div class="container mx-auto p-4 max-w-7xl">
     <h1 class="font-bold mb-4 text-center text-4xl text-primary py-5">
-      {{ t(`projects.title`) }}
+      {{ t('projects.title') }}
     </h1>
-
-   
 
     <!-- رسالة الخطأ في حال حدوثه -->
     <div v-if="error" class="text-center my-8">
@@ -14,17 +12,17 @@
     <!-- Grid للمشاريع -->
     <div v-if="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div
-        v-for="project in projects"
+        v-for="project in visibleProjects"
         :key="project.id"
         :class="['rounded-lg shadow-xl my-4 p-4 bg-white dark:bg-secondaryDark', { 'is-active': isActiveProject(project.id) }]">
 
-        <!-- عنصر تحميل الصورة -->
+        <!-- عرض الدوار أثناء تحميل الصورة -->
         <div v-if="isImageLoading[project.id]" class="flex justify-center items-center h-56">
           <div class="rounded-md h-12 w-12 border-4 border-t-4 border-secondary animate-spin"></div>
         </div>
 
-        <!-- صورة المشروع -->
-        <img v-show="!isImageLoading[project.id]" :src="project.main_image" alt="Project image" class="w-full h-56 object-contain mb-4"
+        <!-- عرض الصورة عند تحميلها -->
+        <img v-else :src="project.main_image" alt="Project image" class="w-full h-56 object-contain mb-4"
           @load="handleImageLoad(project.id)" @error="handleImageError(project.id)"
           loading="lazy">
 
@@ -33,29 +31,37 @@
           <h2 class="text-2xl font-bold mb-2 dark:text-white opacity-75">{{ project.name }}</h2>
           <!-- زر عرض التفاصيل -->
           <router-link :to="'/projects/' + project.id" class="text-primary dark:text-primary hover:underline hover:text-gray-dark">
-            {{ t(`projects.view`) }}
+            {{ t('projects.view') }}
           </router-link>
         </div>
       </div>
     </div>
+
+    <!-- زر عرض المزيد -->
+    <div v-if="!loading && visibleProjects.length < projects.length" class="text-center mt-6">
+      <button @click="showMoreProjects" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary">
+        {{ t('aboutUs.show.showMore') }}
+      </button>
+    </div>
   </div>
 </template>
 
-
-
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue'; // إضافة computed هنا
 import { useRoute } from 'vue-router';
 import { BASE_URL } from '@/config';
 import { useI18n } from 'vue-i18n';
-import LandingScreen from '@/components/master/LandingScreen.vue';
 
-const { t ,locale } = useI18n();
+const { t, locale } = useI18n();
 const projects = ref([]);
-const loading = ref(true); // حالة التحميل
+const loading = ref(true); // حالة التحميل العامة للمشاريع
 const error = ref(null); // حالة الخطأ
 const route = useRoute(); // للوصول إلى route الحالي
-const isImageLoading = ref({}); // حالة تحميل لكل صورة
+const isImageLoading = ref({}); // حالة تحميل كل صورة على حدة
+const visibleProjectsCount = ref(9); // عدد المشاريع المرئية حاليًا
+
+// عرض المشاريع المرئية فقط
+const visibleProjects = computed(() => projects.value.slice(0, visibleProjectsCount.value));
 
 // دالة لجلب المشاريع
 async function fetchProjects() {
@@ -71,12 +77,14 @@ async function fetchProjects() {
     }
     const data = await response.json();
     projects.value = data.data;
-    
-    // تهيئة حالات تحميل الصور لكل مشروع
-    isImageLoading.value = projects.value.reduce((acc, project) => {
-      acc[project.id] = true;
-      return acc;
-    }, {});
+
+    // تعيين حالة تحميل الصور لكل مشروع
+    projects.value.forEach((project) => {
+      isImageLoading.value[project.id] = true;
+    });
+
+    // انتظار تحميل جميع الصور
+    await Promise.all(projects.value.map((project) => preloadImage(project.main_image, project.id)));
   } catch (err) {
     console.error('Error fetching projects:', err);
     error.value = err.message;
@@ -85,19 +93,40 @@ async function fetchProjects() {
   }
 }
 
-// دالة التعامل مع تحميل الصورة
+// دالة لتحميل الصور مسبقًا
+function preloadImage(url, projectId) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => {
+      handleImageLoad(projectId);
+      resolve();
+    };
+    img.onerror = () => {
+      handleImageError(projectId);
+      reject();
+    };
+  });
+}
+
+// دالة التعامل مع تحميل الصورة بنجاح
 function handleImageLoad(projectId) {
-  isImageLoading.value[projectId] = false;
+  isImageLoading.value[projectId] = false; // تعيين حالة الصورة إلى false بعد تحميلها
 }
 
 // دالة التعامل مع خطأ تحميل الصورة
 function handleImageError(projectId) {
-  isImageLoading.value[projectId] = false;
+  isImageLoading.value[projectId] = false; // تعيين حالة الصورة إلى false في حال حدوث خطأ
 }
 
 // التحقق من المشروع النشط
 function isActiveProject(projectId) {
   return projectId === Number(route.params.id); // مقارنة معرف المشروع مع الـroute
+}
+
+// دالة عرض المزيد من المشاريع
+function showMoreProjects() {
+  visibleProjectsCount.value += 9; // عرض 9 مشاريع إضافية
 }
 
 // جلب المشاريع عند تحميل الصفحة
@@ -108,7 +137,6 @@ onMounted(() => {
 watch([locale, route], () => {
   fetchProjects(); // جلب المشاريع عند تغيير اللغة أو الرابط
 });
-
 </script>
 
 <style scoped>

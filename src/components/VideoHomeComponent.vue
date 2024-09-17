@@ -30,7 +30,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useVideoStore } from '../stores/videoStroe';
+import {useVideoStore} from "@/stores/videoStroe.js"
 import { BASE_URL } from '../config.js';
 
 const { t } = useI18n();
