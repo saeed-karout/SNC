@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Beiruti:wght@500..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-image: url('../assets/bg/11.png');
+  background-color: #fffffdeb;
+  background-size: cover; 
+  background-repeat: repeat; 
+  background-attachment: fixed; 
+  background-position: center; 
+  font-family: "Beiruti", sans-serif;
+  font-size: x-large;
+  font-weight: 300;
+
+  /* Scrollbar styles */
+  --sb-track-color: #c7a887;
+  --sb-thumb-color: #314351;
+  --sb-size: 5px;
+}
+
+
+
+
+body::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+body::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 10px;
+  border: 8px solid #34505d;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  body {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+  }
+}
+
+/* Dark mode specific styles */
+.dark body {
+  background-color: #1f2937f3;
+  background-image: url('../assets/bg/11.png') !important;
+}
+
+
+/* Responsive styles */
+@media (max-width: 800px) {
+  body {
+    background-image: url('../assets/bg/bgMobileLight.png');
+   
+    background-size: content;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-color: #fffffdeb;
+  }
+  
+  /* Dark mode for mobile */
+  .dark body {
+  background-color: #1f2937f3;
+
+    background-image: url('../assets/bg/bgMobile.png') !important;
+  }
+}
+

@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "name": "اعمال التشطيب",
+    
+    "projects": [
+      {
+        "id": 1,
+        "name": "وادي الشام",
+        "description":"هذا المشروع تم بنائه باحترافية عالية و بافضل التقنيات ",
+        "main_images": ["https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg"],
+        "images": ["https://www.fmb.org.uk/static/f1ec6ef3-294e-465e-86e354334140b672/d18ee5b4-026a-4de1-b3a2926e8d39c835/4545x3033_highestperformance__d57c257bab4a/FMBMaster-Builder-and-homeowner.jpg", "https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg","https://www.fmb.org.uk/static/f1ec6ef3-294e-465e-86e354334140b672/d18ee5b4-026a-4de1-b3a2926e8d39c835/4545x3033_highestperformance__d57c257bab4a/FMBMaster-Builder-and-homeowner.jpg", "https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg","https://www.fmb.org.uk/static/f1ec6ef3-294e-465e-86e354334140b672/d18ee5b4-026a-4de1-b3a2926e8d39c835/4545x3033_highestperformance__d57c257bab4a/FMBMaster-Builder-and-homeowner.jpg", "https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg","https://www.fmb.org.uk/static/f1ec6ef3-294e-465e-86e354334140b672/d18ee5b4-026a-4de1-b3a2926e8d39c835/4545x3033_highestperformance__d57c257bab4a/FMBMaster-Builder-and-homeowner.jpg", "https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg"]
+      },
+      {
+        "id": 2,
+        "name": "برج النخيل",
+        "description":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining esse",
+        "main_images": ["https://welcome.bartaa.ps/wp-content/uploads/2016/03/2122.jpg"],
+        "images": ["https://welcome.bartaa.ps/wp-content/uploads/2016/03/2122.jpg", "https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg"]
+      },
+       {
+        "id": 2,
+        "name": " سوق المواسي",
+        "main_images": ["https://welcome.bartaa.ps/wp-content/uploads/2016/03/2122.jpg"],
+        "images": ["https://welcome.bartaa.ps/wp-content/uploads/2016/03/2122.jpg", "https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg"]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "اعمال البناء",
+    "description":"هذا المشروع تم بنائه باحترافية عالية و بافضل التقنيات ",
+    "projects": [
+      {
+        "id": 1,
+        "name": "مجمع الأمل السكني",
+        "main_images": ["https://images.squarespace-cdn.com/content/v1/588635e63e00be43ba3b75c0/1554210410065-X0C3S9HYWPXHGPVZ9B2A/April_2019.jpeg"],
+        "images": ["https://welcome.bartaa.ps/wp-content/uploads/2016/03/2122.jpg", "https://welcome.bartaa.ps/wp-content/uploads/2016/03/2122.jpg"]
+      },
+      {
+        "id": 2,
+        "name": "فندق النجوم",
+        "main_images": ["https://example.com/images/stars-hotel-1.jpg", "https://example.com/images/stars-hotel-2.jpg"],
+        "images": ["https://example.com/images/stars-hotel-3.jpg", "https://example.com/images/stars-hotel-4.jpg", "https://example.com/images/stars-hotel-5.jpg"]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "اعمال الكهرباء",
+    "description":"هذا المشروع تم بنائه باحترافية عالية و بافضل التقنيات ",
+    "projects": [
+      {
+        "id": 1,
+        "name": "مركز التسوق الكبير",
+        "main_images": ["https://example.com/images/big-mall-1.jpg", "https://example.com/images/big-mall-2.jpg"],
+        "images": ["https://example.com/images/big-mall-3.jpg", "https://example.com/images/big-mall-4.jpg", "https://example.com/images/big-mall-5.jpg"]
+      },
+      {
+        "id": 2,
+        "name": "حديقة الزهور",
+        "main_images": ["https://example.com/images/flower-park-1.jpg", "https://example.com/images/flower-park-2.jpg"],
+        "images": ["https://example.com/images/flower-park-3.jpg", "https://example.com/images/flower-park-4.jpg", "https://example.com/images/flower-park-5.jpg"]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "اعمال السباكة",
+    "description":"هذا المشروع تم بنائه باحترافية عالية و بافضل التقنيات ",
+    "projects": [
+      {
+        "id": 1,
+        "name": "مستشفى الشفاء",
+        "main_images": ["https://example.com/images/shifa-hospital-1.jpg", "https://example.com/images/shifa-hospital-2.jpg"],
+        "images": ["https://example.com/images/shifa-hospital-3.jpg", "https://example.com/images/shifa-hospital-4.jpg", "https://example.com/images/shifa-hospital-5.jpg"]
+      },
+      {
+        "id": 2,
+        "name": "مجمع المياه",
+        "main_images": ["https://example.com/images/water-complex-1.jpg", "https://example.com/images/water-complex-2.jpg"],
+        "images": ["https://example.com/images/water-complex-3.jpg", "https://example.com/images/water-complex-4.jpg", "https://example.com/images/water-complex-5.jpg"]
+      }
+    ]
+  }
+]
