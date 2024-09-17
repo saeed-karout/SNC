@@ -20,7 +20,7 @@
                 icon="fa-brands fa-snapchat" />
 
         </a>
-        <a href="/" class="social  dark:bg-white" target="_blank">
+        <a href="https://www.linkedin.com/company/snccontracting/" class="social  dark:bg-white" target="_blank">
             <font-awesome-icon class="text-white hover:text-secondaryDark dark:text-secondaryDark"
                 icon="fa-brands fa-linkedin-in" />
 
