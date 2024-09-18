@@ -30,7 +30,7 @@
     </div>
 
     <!-- Fullscreen Image Viewer -->
-    <div v-if="fullscreenImage" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50" @click="closeImage">
+    <div v-if="fullscreenImage" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center " style="z-index: 100000000;" @click="closeImage">
       <img :src="fullscreenImage" loading="lazy" alt="Fullscreen Product Image" class="max-w-full max-h-full object-contain" />
       <button class="absolute top-5 right-5 text-white text-2xl" @click="closeImage">&times;</button>
     </div>
