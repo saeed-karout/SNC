@@ -186,7 +186,7 @@ watch(locale, () => {
 
                         <div class="flex flex-col gap-4">
                             <hr class="border-b border-[#6F7782] dark:border-yellow-500 w-full mb-4">
-                            <div class="flex flex-row lg:flex-row justify-between items-center">
+                            <div class="flex flex-row lg:flex-row justify-between items-stretch">
                                 <div class="text-center">
                                     <h3 class="text-lg dark:text-white font-semibold opacity-75">
                                         {{ t(`projects.start`) }}</h3>
