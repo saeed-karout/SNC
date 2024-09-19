@@ -10,17 +10,20 @@
 
       <!-- Mobile Menu Buttons -->
       <div class="flex lg:hidden gap-6 items-center">
+        <!-- تعديل زر تغيير الوضع مع الأنيميشن -->
         <button
-          @click="darkModeStore.toggleDarkMode"
-          class="text-gray-700 hover:text-gray-900 dark:text-[#B99269]"
+          @click="toggleDarkModeWithAnimation"
+          class="text-gray-700 hover:text-gray-900 dark:text-[#B99269] relative transition-all duration-500 transform hover:scale-110"
           aria-label="Toggle Dark Mode"
         >
-          <template v-if="darkModeStore.isDarkMode">
-            <SunIcon class="h-6 w-6" aria-hidden="true" />
-          </template>
-          <template v-else>
-            <MoonIcon class="h-6 w-6" aria-hidden="true" />
-          </template>
+          <div class="icon-wrapper">
+            <template v-if="darkModeStore.isDarkMode">
+              <SunIcon class="h-6 w-6 sun-icon transition-all duration-500" aria-hidden="true" />
+            </template>
+            <template v-else>
+              <MoonIcon class="h-6 w-6 moon-icon transition-all duration-500" aria-hidden="true" />
+            </template>
+          </div>
         </button>
 
         <button
@@ -58,17 +61,20 @@
 
       <!-- Desktop Dark Mode & Language Buttons -->
       <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-6 items-center">
+        <!-- نفس التعديل على زر تغيير الوضع في نسخة الديسكتوب -->
         <button
-          @click="darkModeStore.toggleDarkMode"
-          class="text-gray-700 hover:text-gray-900 dark:text-[#B99269]"
+          @click="toggleDarkModeWithAnimation"
+          class="text-gray-700 hover:text-gray-900 dark:text-[#B99269] relative transition-all duration-500 transform hover:scale-110"
           aria-label="Toggle Dark Mode"
         >
-          <template v-if="darkModeStore.isDarkMode">
-            <SunIcon class="h-6 w-6" aria-hidden="true" />
-          </template>
-          <template v-else>
-            <MoonIcon class="h-6 w-6" aria-hidden="true" />
-          </template>
+          <div class="icon-wrapper">
+            <template v-if="darkModeStore.isDarkMode">
+              <SunIcon class="h-6 w-6 sun-icon transition-all duration-500" aria-hidden="true" />
+            </template>
+            <template v-else>
+              <MoonIcon class="h-6 w-6 moon-icon transition-all duration-500" aria-hidden="true" />
+            </template>
+          </div>
         </button>
 
         <button
@@ -99,7 +105,7 @@
               :to="item.href"
               @click.native="toggleMobileMenu"
               :class="[ 
-                'text-xl  font-semibold leading-6 flex justify-center bg-[#b8b8b9] dark:bg-[#747678] opacity-80 p-4 rounded-xl hover:text-[#314351] dark:hover:text-[#B99269]',
+                'text-2xl font-semibold leading-6 flex justify-center bg-[#b8b8b9] dark:bg-[#747678] dark:opacity-70 p-4 rounded-xl hover:text-[#314351] dark:hover:text-[#B99269]',
                 isActive(item.href) ? 'bg-secondary p-4 rounded-xl text-[#B99269] dark:text-[#B99269]' : 'text-gray-900 dark:text-gray-100',
               ]"
             >
@@ -115,15 +121,15 @@
                 {{ dataStore.language === 'ar' ? 'EN' : 'AR' }}
               </button>
               <button
-                @click="darkModeStore.toggleDarkMode"
-                class="text-gray-700 hover:text-gray-900 dark:text-[#B99269]"
+                @click="toggleDarkModeWithAnimation"
+                class="text-gray-700 hover:text-gray-900 dark:text-[#B99269] relative transition-all duration-500 transform hover:scale-110"
                 aria-label="Toggle Dark Mode"
               >
                 <template v-if="darkModeStore.isDarkMode">
-                  <SunIcon class="h-6 w-6" aria-hidden="true" />
+                  <SunIcon class="h-6 w-6 sun-icon transition-all duration-500" aria-hidden="true" />
                 </template>
                 <template v-else>
-                  <MoonIcon class="h-6 w-6" aria-hidden="true" />
+                  <MoonIcon class="h-6 w-6 moon-icon transition-all duration-500" aria-hidden="true" />
                 </template>
               </button>
             </div>
@@ -187,6 +193,11 @@ const handleScroll = () => {
 
 const updateDirection = () => {
   document.documentElement.setAttribute('dir', dataStore.language === 'ar' ? 'rtl' : 'ltr');
+};
+
+// دالة لتفعيل الأنيميشن عند تغيير الوضع
+const toggleDarkModeWithAnimation = () => {
+  darkModeStore.toggleDarkMode();
 };
 
 onMounted(() => {
@@ -276,5 +287,21 @@ onUnmounted(() => {
     transform: translateX(100%);
     opacity: 0;
   }
+}
+
+/* تأثير الأنيميشن على أيقونة الوضع الداكن */
+.icon-wrapper {
+  display: inline-block;
+  position: relative;
+  top: 5px;
+}
+
+.sun-icon, .moon-icon {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+button:hover .sun-icon, button:hover .moon-icon {
+  transform: rotate(360deg);
+  opacity: 1;
 }
 </style>
