@@ -183,7 +183,7 @@
                         </div>
 
                         <!-- الصور المصغرة -->
-                        <div class="mt-4 flex flex-wrap gap-2">
+                        <div class="mt-4 flex flex-wrap justify-center gap-2">
                             <img v-for="(image, index) in selectedProject.images" :key="index"
                                 :src="image" :alt="`${selectedProject.name} - ${index + 1}`"
                                 @click="selectImage(image)"
