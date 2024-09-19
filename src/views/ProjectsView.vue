@@ -27,7 +27,7 @@
 
         <div class="flex items-center justify-between self-center">
           <!-- اسم المشروع -->
-          <h2 class="text-2xl font-bold mb-2 dark:text-white opacity-75">{{ project.name }}</h2>
+          <h2 class="text-xl md:text-2xl font-bold mb-2 dark:text-white opacity-75">{{ project.name }}</h2>
           <!-- زر عرض التفاصيل -->
           <router-link :to="'/projects/' + project.id" class="text-primary dark:text-primary hover:underline hover:text-gray-dark text-lg">
             {{ t('projects.view') }}
