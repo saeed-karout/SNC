@@ -4,7 +4,7 @@ import axios from 'axios';
 export const useDataStore = defineStore('dataStore', {
   state: () => ({
     data: [],
-    language: JSON.parse(localStorage.getItem('myAppData'))?.language || 'ar', // اللغة الافتراضية هي العربية
+    language: 'ar', // اللغة الافتراضية هي العربية
   }),
   actions: {
     async fetchData() {
@@ -24,10 +24,13 @@ export const useDataStore = defineStore('dataStore', {
           console.log('Response data:', response.data);
 
           if (Array.isArray(response.data)) {
-            this.data = response.data.map(item => ({
-              name: item.name,
-              description: item.description,
-            }));
+            // استخدم $patch لتحديث الحالة بعد عملية غير متزامنة
+            this.$patch({
+              data: response.data.map(item => ({
+                name: item.name,
+                description: item.description,
+              })),
+            });
           } else {
             console.error('Expected an array but received:', response.data);
           }
@@ -40,12 +43,12 @@ export const useDataStore = defineStore('dataStore', {
       }
     },
     setLanguage(newLanguage) {
-      this.language = newLanguage;
-      localStorage.setItem('myAppData', JSON.stringify({
-        ...JSON.parse(localStorage.getItem('myAppData') || '{}'),
+      // استخدم $patch لتحديث الحالة بشكل متزامن
+      this.$patch({
         language: newLanguage,
-      }));
+      });
 
+      // لا حاجة لتخزين اللغة يدويًا في localStorage، حيث يقوم Pinia Persist بذلك
       // إعادة تحميل البيانات للغة الجديدة
       this.fetchData();
     },
@@ -56,6 +59,7 @@ export const useDataStore = defineStore('dataStore', {
       {
         key: 'myAppData',
         storage: localStorage,
+        paths: ['language'], // تحديد أن 'language' هي التي يجب تخزينها
       },
     ],
   },

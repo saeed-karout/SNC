@@ -25,7 +25,7 @@
 
         <button
           @click="toggleLanguage"
-          class="text-gray-700 hover:text-gray-900 dark:text-gray-300"
+          class="text-gray-700 hover:text-gray-900 text-lg dark:text-gray-300"
           aria-label="Toggle Language"
         >
           {{ dataStore.language === 'ar' ? 'EN' : 'AR' }}
@@ -73,7 +73,7 @@
 
         <button
           @click="toggleLanguage"
-          class="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+          class="text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
           aria-label="Toggle Language"
         >
           {{ dataStore.language === 'ar' ? 'EN' : 'AR' }}
@@ -99,8 +99,8 @@
               :to="item.href"
               @click.native="toggleMobileMenu"
               :class="[ 
-                'text-md font-semibold leading-6 flex hover:text-[#314351] dark:hover:text-[#B99269]',
-                isActive(item.href) ? 'text-[#B99269] dark:text-[#B99269]' : 'text-gray-900 dark:text-gray-100',
+                'text-xl  font-semibold leading-6 flex justify-center bg-[#b8b8b9] dark:bg-[#747678] opacity-80 p-4 rounded-xl hover:text-[#314351] dark:hover:text-[#B99269]',
+                isActive(item.href) ? 'bg-secondary p-4 rounded-xl text-[#B99269] dark:text-[#B99269]' : 'text-gray-900 dark:text-gray-100',
               ]"
             >
               {{ item.name }}
@@ -109,7 +109,7 @@
             <div class="flex justify-between items-center">
               <button
                 @click="toggleLanguage"
-                class="text-gray-700 hover:text-gray-900 dark:text-gray-300"
+                class="text-gray-700 hover:text-gray-900 text-lg dark:text-gray-300"
                 aria-label="Toggle Language"
               >
                 {{ dataStore.language === 'ar' ? 'EN' : 'AR' }}
@@ -135,67 +135,33 @@
 </template>
 
 <script setup>
-import {
-  ref,
-  computed,
-  onMounted,
-  watch,
-  onUnmounted
-} from 'vue';
-import {
-  useDarkModeStore
-} from '@/stores/useDarkModeStore';
-import {
-  Bars3Icon,
-  SunIcon,
-  MoonIcon,
-  XMarkIcon
-} from '@heroicons/vue/24/outline';
-
-import {
-  useRoute
-} from 'vue-router';
-import {
-  useDataStore
-} from '@/stores/useDataStore';
-import {
-  useI18n
-} from 'vue-i18n';
+import { ref, computed, onMounted, watch, onUnmounted } from 'vue';
+import { useDarkModeStore } from '@/stores/useDarkModeStore';
+import { Bars3Icon, SunIcon, MoonIcon, XMarkIcon } from '@heroicons/vue/24/outline';
+import { useRoute } from 'vue-router';
+import { useDataStore } from '@/stores/useDataStore';
+import { useI18n } from 'vue-i18n';
 import logoD from '@/assets/LOGO_DARK.png';
 import logoL from '@/assets/LOGO_LIGHT.png';
 
 const dataStore = useDataStore();
 const darkModeStore = useDarkModeStore();
 const route = useRoute();
-const {
-  t,
-  locale
-} = useI18n();
+const { t, locale } = useI18n();
 
 const mobileMenuOpen = ref(false);
 const headerClass = ref('');
 
-const navigation = computed(() => [{
-  name: t('nav.home'),
-  href: '/'
-}, {
-  name: t('nav.services'),
-  href: '/service'
-}, {
-  name: t('nav.about'),
-  href: '/about'
-}, {
-  name: t('nav.news'),
-  href: '/news'
-}, {
-  name: t('nav.contact'),
-  href: '/contact'
-}, {
-  name: t('nav.projects'),
-  href: '/projects'
-}]);
+const navigation = computed(() => [
+  { name: t('nav.home'), href: '/' },
+  { name: t('nav.services'), href: '/service' },
+  { name: t('nav.about'), href: '/about' },
+  { name: t('nav.news'), href: '/news' },
+  { name: t('nav.contact'), href: '/contact' },
+  { name: t('nav.projects'), href: '/projects' },
+]);
 
-const logoSrc = computed(() => darkModeStore.isDarkMode ? logoD : logoL);
+const logoSrc = computed(() => (darkModeStore.isDarkMode ? logoD : logoL));
 
 const isActive = (href) => {
   if (href === '/') {
@@ -232,9 +198,11 @@ onMounted(() => {
 
 watch(
   () => dataStore.language,
-  () => {
-    dataStore.fetchData();
-    updateDirection();
+  (newLang, oldLang) => {
+    if (newLang !== oldLang) {
+      dataStore.fetchData();
+      updateDirection();
+    }
   }
 );
 
