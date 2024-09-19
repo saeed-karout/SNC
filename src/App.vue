@@ -15,7 +15,8 @@ import TawkToWidget from './components/master/TawkToComponent.vue'; // Importing
     <RouterView />       <!-- Children -->
     <FooterComponent />  <!-- Footer -->
     <UpToTopCom />       <!-- Up icon to top -->
-    <TawkToWidget />     <!-- Live chat component -->
+    <TawkToWidget /> 
+         <!-- Live chat component -->
   </div>
 </template>
 
