@@ -10,18 +10,28 @@ export const useDataStore = defineStore('dataStore', {
     // جلب البيانات بناءً على اللغة
     async fetchData() {
       const storedData = localStorage.getItem(`data_${this.language}`);
-
+    
       if (storedData) {
-        this.data = JSON.parse(storedData);
-        console.log(`Loaded data from localStorage for language: ${this.language}`);
+        try {
+          const parsedData = JSON.parse(storedData);
+    
+          if (Array.isArray(parsedData)) {
+            this.data = parsedData;
+            console.log(`Loaded data from localStorage for language: ${this.language}`);
+          } else {
+            console.error('Invalid data format in localStorage:', parsedData);
+          }
+        } catch (error) {
+          console.error('Error parsing stored data:', error);
+        }
       } else {
         try {
           const response = await axios.get('https://snc.shamnet.com.sa', {
             headers: {
-              'Accept-Language': this.language, // إرسال اللغة المحددة في الترويسة
+              'Accept-Language': this.language,
             },
           });
-
+    
           if (Array.isArray(response.data)) {
             this.$patch({
               data: response.data.map(item => ({
@@ -29,17 +39,18 @@ export const useDataStore = defineStore('dataStore', {
                 description: item.description,
               })),
             });
+    
+            localStorage.setItem(`data_${this.language}`, JSON.stringify(this.data));
+            console.log(`Fetched and stored data for language: ${this.language}`);
           } else {
             console.error('Expected an array but received:', response.data);
           }
-
-          localStorage.setItem(`data_${this.language}`, JSON.stringify(this.data));
-          console.log(`Fetched and stored data for language: ${this.language}`);
         } catch (error) {
           console.error('Error fetching data:', error);
         }
       }
     },
+    
     // تغيير اللغة وحفظها
     setLanguage(newLanguage) {
       this.$patch({ language: newLanguage });

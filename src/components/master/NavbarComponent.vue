@@ -179,14 +179,19 @@ const isActive = (href) => {
   return route.path.startsWith(href);
 };
 
-// وظيفة لتغيير اللغة وحفظها
 const toggleLanguage = () => {
   const newLanguage = dataStore.language === 'en' ? 'ar' : 'en';
-  dataStore.setLanguage(newLanguage);
-  locale.value = newLanguage;
-  updateDirection();
-  dataStore.fetchData();  // جلب البيانات بناءً على اللغة الجديدة
+  
+  // قم بالتأكد من اللغة الجديدة قبل تعيينها
+  if (newLanguage) {
+    dataStore.setLanguage(newLanguage);
+    locale.value = newLanguage;
+    updateDirection();
+  } else {
+    console.error('Invalid language:', newLanguage);
+  }
 };
+
 
 // فتح/إغلاق القائمة الجانبية للموبايل
 const toggleMobileMenu = () => {
