@@ -79,7 +79,7 @@
 
         <button
           @click="toggleLanguage"
-          class="text-sm text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+          class="text-md text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
           aria-label="Toggle Language"
         >
           {{ dataStore.language === 'ar' ? 'EN' : 'AR' }}
@@ -98,7 +98,7 @@
               <XMarkIcon class="h-6 w-6 text-gray-300 hover:text-red-500" aria-hidden="true" />
             </button>
           </div>
-          <div class="py-6 px-6 space-y-6">
+          <div class="py-6 px-6 space-y-4">
             <router-link
               v-for="item in navigation"
               :key="item.name"
@@ -158,6 +158,7 @@ const { t, locale } = useI18n();
 const mobileMenuOpen = ref(false);
 const headerClass = ref('');
 
+// بيانات القائمة بناءً على الترجمة الحالية
 const navigation = computed(() => [
   { name: t('nav.home'), href: '/' },
   { name: t('nav.services'), href: '/service' },
@@ -167,8 +168,10 @@ const navigation = computed(() => [
   { name: t('nav.projects'), href: '/projects' },
 ]);
 
+// تحديد الشعار بناءً على وضعية الإضاءة
 const logoSrc = computed(() => (darkModeStore.isDarkMode ? logoD : logoL));
 
+// تحديد العنصر النشط بناءً على المسار الحالي
 const isActive = (href) => {
   if (href === '/') {
     return route.path === href;
@@ -176,21 +179,26 @@ const isActive = (href) => {
   return route.path.startsWith(href);
 };
 
+// وظيفة لتغيير اللغة وحفظها
 const toggleLanguage = () => {
   const newLanguage = dataStore.language === 'en' ? 'ar' : 'en';
   dataStore.setLanguage(newLanguage);
   locale.value = newLanguage;
   updateDirection();
+  dataStore.fetchData();  // جلب البيانات بناءً على اللغة الجديدة
 };
 
+// فتح/إغلاق القائمة الجانبية للموبايل
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
 };
 
+// تحديث CSS بناءً على التمرير
 const handleScroll = () => {
   headerClass.value = window.scrollY > 100 ? 'bg-white dark:bg-gray-800 shadow-lg' : '';
 };
 
+// تحديث الاتجاه بناءً على اللغة
 const updateDirection = () => {
   document.documentElement.setAttribute('dir', dataStore.language === 'ar' ? 'rtl' : 'ltr');
 };
@@ -200,27 +208,46 @@ const toggleDarkModeWithAnimation = () => {
   darkModeStore.toggleDarkMode();
 };
 
+// تنفيذ الكود عند تحميل الصفحة
 onMounted(() => {
+  // تحميل تفضيل الوضع الليلي من المخزن
   darkModeStore.loadDarkModePreference();
-  dataStore.fetchData();
+
+  // التحقق من اللغة المخزنة في localStorage
+  const storedLanguage = localStorage.getItem('myAppData');
+  if (storedLanguage) {
+    const parsedLanguage = JSON.parse(storedLanguage);
+    if (parsedLanguage.language) {
+      dataStore.setLanguage(parsedLanguage.language);
+      locale.value = parsedLanguage.language;
+      updateDirection();
+    }
+  } else {
+    dataStore.setLanguage('ar'); // اللغة الافتراضية
+  }
+
+  dataStore.fetchData();  // جلب البيانات
   updateDirection();
   window.addEventListener('scroll', handleScroll);
 });
 
+// مراقبة التغييرات في اللغة
 watch(
   () => dataStore.language,
   (newLang, oldLang) => {
     if (newLang !== oldLang) {
-      dataStore.fetchData();
-      updateDirection();
+      dataStore.fetchData();  // تحديث البيانات بناءً على اللغة الجديدة
+      updateDirection();  // تحديث الاتجاه بناءً على اللغة
     }
   }
 );
 
+// تنظيف عند الخروج
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
 </script>
+
 
 <style scoped>
 /* Navbar Styles */
