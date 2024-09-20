@@ -1,6 +1,5 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import piniaPluginPersist from 'pinia-plugin-persist'
 import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import router from './router'
@@ -28,7 +27,6 @@ const app = createApp(App)
 
 // إنشاء مثيل Pinia
 const pinia = createPinia()
-pinia.use(piniaPluginPersist)
 
 // تسجيل مكون FontAwesomeIcon عالميًا
 app.component('font-awesome-icon', FontAwesomeIcon)
@@ -46,12 +44,15 @@ app.mount('#app')
 const dataStore = useDataStore()
 
 dataStore.$subscribe((mutation, state) => {
-  if (mutation.storeId === 'dataStore' && mutation.events.some(event => event.key === 'language')) {
-    const newLocale = state.language === 'EN' ? 'en' : 'ar'
-    i18n.global.locale.value = newLocale
-    updateDirection();
+  // تحقق مما إذا كان الـ store الخاص بتغيير اللغة هو dataStore
+  if (mutation.storeId === 'dataStore' && mutation.events === 'language') {
+    // تعيين اللغة الجديدة بناءً على الحالة الجديدة
+    const newLocale = state.language === 'EN' ? 'en' : 'ar';
+    i18n.global.locale.value = newLocale;
+    updateDirection(); // تحديث اتجاه النص
   }
-})
+});
+
 
 const updateDirection = () => {
   const dir = dataStore.language === 'ar' ? 'rtl' : 'ltr';

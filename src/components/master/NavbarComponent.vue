@@ -168,21 +168,10 @@ const navigation = computed(() => [
   { name: t('nav.projects'), href: '/projects' },
 ]);
 
-// تحديد الشعار بناءً على وضعية الإضاءة
 const logoSrc = computed(() => (darkModeStore.isDarkMode ? logoD : logoL));
-
-// تحديد العنصر النشط بناءً على المسار الحالي
-const isActive = (href) => {
-  if (href === '/') {
-    return route.path === href;
-  }
-  return route.path.startsWith(href);
-};
-
+const isActive = (href) => (href === '/' ? route.path === href : route.path.startsWith(href));
 const toggleLanguage = () => {
   const newLanguage = dataStore.language === 'en' ? 'ar' : 'en';
-  
-  // قم بالتأكد من اللغة الجديدة قبل تعيينها
   if (newLanguage) {
     dataStore.setLanguage(newLanguage);
     locale.value = newLanguage;
@@ -191,34 +180,26 @@ const toggleLanguage = () => {
     console.error('Invalid language:', newLanguage);
   }
 };
-
-
-// فتح/إغلاق القائمة الجانبية للموبايل
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
 };
-
-// تحديث CSS بناءً على التمرير
 const handleScroll = () => {
   headerClass.value = window.scrollY > 100 ? 'bg-white dark:bg-gray-800 shadow-lg' : '';
 };
-
-// تحديث الاتجاه بناءً على اللغة
 const updateDirection = () => {
   document.documentElement.setAttribute('dir', dataStore.language === 'ar' ? 'rtl' : 'ltr');
 };
-
-// دالة لتفعيل الأنيميشن عند تغيير الوضع
 const toggleDarkModeWithAnimation = () => {
   darkModeStore.toggleDarkMode();
 };
 
-// تنفيذ الكود عند تحميل الصفحة
-onMounted(() => {
-  // تحميل تفضيل الوضع الليلي من المخزن
-  darkModeStore.loadDarkModePreference();
+// دالة afterLeave
+const afterLeave = () => {
+  console.log("Mobile menu has closed");
+};
 
-  // التحقق من اللغة المخزنة في localStorage
+onMounted(() => {
+  darkModeStore.loadDarkModePreference();
   const storedLanguage = localStorage.getItem('myAppData');
   if (storedLanguage) {
     const parsedLanguage = JSON.parse(storedLanguage);
@@ -230,24 +211,18 @@ onMounted(() => {
   } else {
     dataStore.setLanguage('ar'); // اللغة الافتراضية
   }
-
-  dataStore.fetchData();  // جلب البيانات
+  dataStore.fetchData();
   updateDirection();
   window.addEventListener('scroll', handleScroll);
 });
 
-// مراقبة التغييرات في اللغة
-watch(
-  () => dataStore.language,
-  (newLang, oldLang) => {
-    if (newLang !== oldLang) {
-      dataStore.fetchData();  // تحديث البيانات بناءً على اللغة الجديدة
-      updateDirection();  // تحديث الاتجاه بناءً على اللغة
-    }
+watch(() => dataStore.language, (newLang, oldLang) => {
+  if (newLang !== oldLang) {
+    dataStore.fetchData();
+    updateDirection();
   }
-);
+});
 
-// تنظيف عند الخروج
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
