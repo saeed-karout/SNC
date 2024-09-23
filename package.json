@@ -1,15 +1,10 @@
 {
   "name": "newtest",
   "version": "1.0.0",
-  "type": "module",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/saeed-karout/sham_test.git"
-  },
   "scripts": {
-    "dev": "vite",
+    "serve": "vite preview",
     "build": "vite build",
-    "serve": "vite preview"
+    "dev": "vite"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
@@ -25,6 +20,7 @@
     "pinia": "^2.0.0",
     "pinia-plugin-persist": "^1.0.0",
     "preline": "^2.4.1",
+    "register-service-worker": "^1.7.2",
     "swiper": "^11.1.14",
     "tailwindcss": "^3.4.9",
     "vue": "^3.2.0",
@@ -36,8 +32,15 @@
     "@tailwindcss/forms": "^0.5.8",
     "@vitejs/plugin-vue": "^5.1.2",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "@vue/cli-plugin-pwa": "~5.0.0",
     "autoprefixer": "^10.4.20",
     "vite": "^5.4.1",
+    "vite-plugin-pwa": "^0.20.5",
     "vite-plugin-vue-devtools": "^7.3.8"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/saeed-karout/sham_test.git"
+  },
+  "type": "module"
 }

@@ -94,9 +94,16 @@
                     <span style="direction: ltr;" class="flex gap-1 text-sm text-gray-500 dark:text-gray-300">
                         {{ t('footer.powered') }}
                         <a href="https://www.instagram.com/snc.ltd?igsh=ODEwODVmeXhwdGh6" target="_blank"
-                            class="gradient-text">
+                            class="gradient-text flex gap-0 items-center justify-center">
                             {{ t('footer.plateau') }}
+                            
+
+                                <img src="/img/icons/icon.png" width="22px" alt="">
+                            
                         </a>
+
+
+
                     </span>
 
 
@@ -134,11 +141,13 @@
         margin: auto;
         /* Center map in its container */
     }
-    .gradient-text {
-    background: linear-gradient(90deg, #FF5733, #FFC300); /* ألوان التدرج */
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent; /* اجعل النص شفافًا لإظهار التدرج */
-}
 
+    .gradient-text {
+        background: linear-gradient(90deg, #eb2952, #141823);
+        /* ألوان التدرج */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        /* اجعل النص شفافًا لإظهار التدرج */
+    }
 </style>

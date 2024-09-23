@@ -12,6 +12,7 @@ import { useDataStore } from './stores/useDataStore.js'
 // استيراد ملفات الترجمة
 import enMsg from '../src/plugins/locales/en.json'
 import arMsg from '../src/plugins/locales/ar.json'
+import './registerServiceWorker'
 
 // إعداد i18n
 const i18n = createI18n({
@@ -39,7 +40,7 @@ app.use(pinia)
 // تثبيت تطبيق Vue في DOM
 app.mount('#app')
 
-  
+
 // تحديث اللغة في i18n عند تغييرها من الـ store
 const dataStore = useDataStore()
 
@@ -59,4 +60,4 @@ const updateDirection = () => {
   document.documentElement.setAttribute('dir', dir);
 };
 
-updateDirection(); // ضبط الاتجاه عند بداية التطبيق
+updateDirection();
