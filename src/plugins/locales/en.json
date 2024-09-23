@@ -82,7 +82,9 @@
             "contact":"contact",
             "projects":"projects"
         },
-        "copyright":"All rights reserved for S.N.C Contracting © 2024"
+        "copyright":"All rights reserved for S.N.C Contracting © 2024",
+        "powered":"Powered By",
+        "plateau":"Plateau"
     
     }
 }

@@ -13,7 +13,7 @@
         <!-- تعديل زر تغيير الوضع مع الأنيميشن -->
         <button
           @click="toggleDarkModeWithAnimation"
-          class="text-gray-700 hover:text-gray-900 dark:text-[#B99269] relative transition-all duration-500 transform hover:scale-110"
+          class="text-gray-700 hover:text-gray-900 dark:text-primary relative transition-all duration-500 transform hover:scale-110"
           aria-label="Toggle Dark Mode"
         >
           <div class="icon-wrapper">
@@ -52,7 +52,7 @@
           :to="item.href"
           :class="[ 
             'text-md font-semibold leading-6 hover:text-[#314351]',
-            isActive(item.href) ? 'text-[#B99269] dark:text-[#B99269]' : 'text-gray-900 dark:text-gray-100',
+            isActive(item.href) ? 'text-primary dark:text-primary' : 'text-gray-900 dark:text-gray-100',
           ]"
         >
           {{ item.name }}
@@ -64,7 +64,7 @@
         <!-- نفس التعديل على زر تغيير الوضع في نسخة الديسكتوب -->
         <button
           @click="toggleDarkModeWithAnimation"
-          class="text-gray-700 hover:text-gray-900 dark:text-[#B99269] relative transition-all duration-500 transform hover:scale-110"
+          class="text-gray-700 hover:text-gray-900 dark:text-primary relative transition-all duration-500 transform hover:scale-110"
           aria-label="Toggle Dark Mode"
         >
           <div class="icon-wrapper">
@@ -105,8 +105,8 @@
               :to="item.href"
               @click.native="toggleMobileMenu"
               :class="[ 
-                'text-2xl font-semibold leading-6 flex justify-center bg-[#b8b8b9] dark:bg-[#747678] dark:opacity-70 p-4 rounded-xl hover:text-[#314351] dark:hover:text-[#B99269]',
-                isActive(item.href) ? 'bg-secondary p-4 rounded-xl text-[#B99269] dark:text-[#B99269]' : 'text-gray-900 dark:text-gray-100',
+                'text-2xl font-semibold leading-6 flex justify-center bg-[#b8b8b9] dark:bg-[#747678] dark:opacity-70 p-4 rounded-xl hover:text-[#314351] dark:hover:text-primary',
+                isActive(item.href) ? 'bg-secondary p-4 rounded-xl text-primary dark:text-primary' : 'text-gray-900 dark:text-gray-100',
               ]"
             >
               {{ item.name }}

@@ -79,15 +79,27 @@
                             referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
 
-                      
+
                     </div>
                 </div>
             </div>
 
             <!-- Footer Bottom Section -->
             <div class="py-6 border-t dark:border-yellow-500 border-gray-200">
-                <div class="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-0 lg:mx-20">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 lg:mx-20">
+
+
                     <span class="text-sm text-gray-500 dark:text-gray-300">{{ t('footer.copyright') }}</span>
+
+                    <span style="direction: ltr;" class="flex gap-1 text-sm text-gray-500 dark:text-gray-300">
+                        {{ t('footer.powered') }}
+                        <a href="https://www.instagram.com/snc.ltd?igsh=ODEwODVmeXhwdGh6" target="_blank"
+                            class="gradient-text">
+                            {{ t('footer.plateau') }}
+                        </a>
+                    </span>
+
+
                     <div class="flex space-x-4">
                         <SocialMediaComponent />
                     </div>
@@ -122,4 +134,11 @@
         margin: auto;
         /* Center map in its container */
     }
+    .gradient-text {
+    background: linear-gradient(90deg, #FF5733, #FFC300); /* ألوان التدرج */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* اجعل النص شفافًا لإظهار التدرج */
+}
+
 </style>
