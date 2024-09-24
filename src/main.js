@@ -60,50 +60,6 @@ const updateDirection = () => {
   document.documentElement.setAttribute('dir', dir);
 };
 
-// let deferredPrompt;
-
-// window.addEventListener('beforeinstallprompt', (e) => {
-
-//   e.preventDefault();
-//   deferredPrompt = e;
-
- 
-//   const installButton = document.createElement('button');
-//   installButton.textContent = 'Install SNC App';
-  
-  
-//   installButton.style.position = 'fixed';
-//   installButton.style.bottom = '15px';
-//   installButton.style.left = '50%';
-//   installButton.style.transform = 'translate(-50%, -50%)';  
-//   installButton.style.padding = '10px 20px';  
-//   installButton.style.zIndex = '1000000000004'; 
-//   installButton.style.fontSize = '16px';
-//   installButton.style.color = '#BB936A';  
-//   installButton.style.borderRadius = '20px';  
-//   installButton.style.backgroundColor = '#293340';  
-
-
-  
-//   document.body.appendChild(installButton);
-
-//   installButton.addEventListener('click', () => {
- 
-//     deferredPrompt.prompt();
-    
-  
-//     deferredPrompt.userChoice.then((choiceResult) => {
-//       if (choiceResult.outcome === 'accepted') {
-//         console.log('User accepted the install prompt');
-//       } else {
-//         console.log('User dismissed the install prompt');
-//       }
-//       deferredPrompt = null;
-//       document.body.removeChild(installButton);
-//     });
-//   });
-// });
-
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
@@ -112,7 +68,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
   // إنشاء زر التثبيت
   const installButton = document.createElement('button');
-  installButton.textContent = 'تثبيت تطبيق SNC';
+  installButton.textContent = i18n.global.t('install');
 
   // تطبيق التنسيقات على الزر
   installButton.style.position = 'fixed';
