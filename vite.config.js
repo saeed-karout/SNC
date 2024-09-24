@@ -15,18 +15,18 @@ export default defineConfig(({ mode }) => {
         registerType: "autoUpdate",
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
-          maximumFileSizeToCacheInBytes: 50000000, // غلوب لتحميل الملفات
+          maximumFileSizeToCacheInBytes: 50000000,
           runtimeCaching: [
             {
               urlPattern: ({ request }) => request.mode === "navigate",
-              handler: "NetworkFirst", // يعتمد على الشبكة أولا ثم الكاش
+              handler: "NetworkFirst",
               options: {
                 cacheName: "pages",
               },
             },
             {
               urlPattern: /.*\.(?:js|css|html|png|svg|ico)$/,
-              handler: "CacheFirst", // يعتمد على الكاش أولا
+              handler: "CacheFirst", 
               options: {
                 cacheName: "assets",
               },
