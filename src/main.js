@@ -60,4 +60,37 @@ const updateDirection = () => {
   document.documentElement.setAttribute('dir', dir);
 };
 
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // منع المتصفح من إظهار التنبيه الافتراضي
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // هنا يمكنك إظهار زر يطلب من المستخدم تثبيت التطبيق
+  const installButton = document.createElement('button');
+  installButton.textContent = 'Install App';
+  installButton.style.position = 'fixed';
+  installButton.style.bottom = '10px';
+  installButton.style.right = '10px';
+  document.body.appendChild(installButton);
+
+  installButton.addEventListener('click', () => {
+    // إظهار نافذة تحميل التطبيق
+    deferredPrompt.prompt();
+    
+    // تحقق من رد المستخدم
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      } else {
+        console.log('User dismissed the install prompt');
+      }
+      deferredPrompt = null;
+      document.body.removeChild(installButton);
+    });
+  });
+});
+
+
 updateDirection();
