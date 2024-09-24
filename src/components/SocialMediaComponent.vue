@@ -2,31 +2,31 @@
 
 
     <div class="flex gap-3">
-        <a href="https://www.instagram.com/snc.ltd?igsh=ODEwODVmeXhwdGh6" target="_blank" class="social dark:bg-white">
+        <a id="instagram" href="https://www.instagram.com/snc.ltd?igsh=ODEwODVmeXhwdGh6" target="_blank" class="social dark:bg-white">
 
             <font-awesome-icon class="text-white hover:text-secondaryDark  dark:text-secondaryDark "
                 icon="fa-brands fa-instagram" />
         </a>
-        <a href="https://www.tiktok.com/@snc.contractoring?is_from_webapp=1&sender_device=pc" target="_blank"
+        <a id="tiktok" href="https://www.tiktok.com/@snc.contractoring?is_from_webapp=1&sender_device=pc" target="_blank"
             class="social   dark:bg-white">
 
             <font-awesome-icon class="text-white hover:text-secondaryDark dark:text-secondaryDark"
                 icon="fa-brands fa-tiktok" />
 
         </a>
-        <a href="https://www.snapchat.com/add/snc_contracting?share_id=BIecBAVNNRQ&locale=en-US" target="_blank"
+        <a id="snapchat" href="https://www.snapchat.com/add/snc_contracting?share_id=BIecBAVNNRQ&locale=en-US" target="_blank"
             class="social  dark:bg-white">
             <font-awesome-icon class="text-white hover:text-secondaryDark dark:text-secondaryDark"
                 icon="fa-brands fa-snapchat" />
 
         </a>
-        <a href="https://www.linkedin.com/company/snccontracting/" class="social  dark:bg-white" target="_blank">
+        <a id="linkedin" href="https://www.linkedin.com/company/snccontracting/" class="social  dark:bg-white" target="_blank">
             <font-awesome-icon class="text-white hover:text-secondaryDark dark:text-secondaryDark"
                 icon="fa-brands fa-linkedin-in" />
 
         </a>
 
-        <a href="https://x.com/shamnet_est" target="_blank"  class="social   dark:bg-white">
+        <a id="x" href="https://x.com/shamnet_est" target="_blank"  class="social   dark:bg-white">
 
             <font-awesome-icon class="text-white hover:text-secondaryDark dark:text-secondaryDark"
                 icon="fa-brands fa-x-twitter" />
