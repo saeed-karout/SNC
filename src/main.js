@@ -69,23 +69,20 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
  
   const installButton = document.createElement('button');
-  installButton.textContent = 'Install App';
+  installButton.textContent = 'Install SNC App';
   
   
   installButton.style.position = 'fixed';
-  installButton.style.top = '50%';
+  installButton.style.bottom = '15px';
   installButton.style.left = '50%';
   installButton.style.transform = 'translate(-50%, -50%)';  
   installButton.style.padding = '10px 20px';  
-  installButton.style.zIndex = '1000'; 
+  installButton.style.zIndex = '1000000000004'; 
   installButton.style.fontSize = '16px';
   installButton.style.color = '#BB936A';  
+  installButton.style.borderRadius = '20px';  
   installButton.style.backgroundColor = '#293340';  
 
- 
-setTimeout(() => {
-  document.body.removeChild(installButton);
-}, 20000); 
 
   
   document.body.appendChild(installButton);

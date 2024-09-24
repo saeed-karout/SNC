@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
         devOptions: {
           enabled: true,
           type: "module",
-          navigateFallback: "index.html", // fallback إذا كانت الصفحة غير موجودة
+       
         },
         manifest: {
           name: "SNC Contracting",
