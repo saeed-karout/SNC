@@ -14,6 +14,13 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
+        workbox: {
+          clientsClaim: true,
+          skipWaiting: true
+        },
+         devOptions: {
+        enabled: true
+      },
         manifest: {
           "name": "SNC Contracting",
           "short_name": "SNC",
