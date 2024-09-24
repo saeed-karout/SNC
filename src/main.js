@@ -63,23 +63,38 @@ const updateDirection = () => {
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  // منع المتصفح من إظهار التنبيه الافتراضي
+
   e.preventDefault();
   deferredPrompt = e;
 
-  // هنا يمكنك إظهار زر يطلب من المستخدم تثبيت التطبيق
+ 
   const installButton = document.createElement('button');
   installButton.textContent = 'Install App';
+  
+  
   installButton.style.position = 'fixed';
-  installButton.style.bottom = '10px';
-  installButton.style.right = '10px';
+  installButton.style.top = '50%';
+  installButton.style.left = '50%';
+  installButton.style.transform = 'translate(-50%, -50%)';  
+  installButton.style.padding = '10px 20px';  
+  installButton.style.zIndex = '1000'; 
+  installButton.style.fontSize = '16px';
+  installButton.style.color = '#BB936A';  
+  installButton.style.backgroundColor = '#293340';  
+
+ 
+setTimeout(() => {
+  document.body.removeChild(installButton);
+}, 20000); 
+
+  
   document.body.appendChild(installButton);
 
   installButton.addEventListener('click', () => {
-    // إظهار نافذة تحميل التطبيق
+ 
     deferredPrompt.prompt();
     
-    // تحقق من رد المستخدم
+  
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the install prompt');

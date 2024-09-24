@@ -45,18 +45,18 @@ export default defineConfig(({ mode }) => {
           background_color: "#BB936A",
           display: "standalone",
           scope: "/",
-          start_url: "/index.html",
+          start_url: "/",
           icons: [
             {
               src: "/img/icons/snc1.png",
               sizes: "511x410",
               type: "image/png",
             },
-            {
-              src: "/img/icons/snc2.png",
-              sizes: "192x192",
-              type: "image/png",
-            },
+            // {
+            //   src: "/img/icons/snc2.png",
+            //   sizes: "192x192",
+            //   type: "image/png",
+            // },
           ],
           screenshots: [
             {
