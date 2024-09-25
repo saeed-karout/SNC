@@ -42,6 +42,10 @@ app.mount('#app')
 // Access the store
 const dataStore = useDataStore()
 
+// Store references to the install button and deferred prompt
+let installButton = null
+let deferredPrompt = null
+
 // Watch the 'language' property directly
 watch(
   () => dataStore.language,
@@ -49,6 +53,11 @@ watch(
     const newLocale = newLanguage.toLowerCase()
     i18n.global.locale.value = newLocale
     updateDirection()
+
+    // Update the installButton text if it exists
+    if (installButton) {
+      installButton.textContent = i18n.global.t('install')
+    }
   },
   { immediate: true }
 )
@@ -58,14 +67,12 @@ const updateDirection = () => {
   document.documentElement.setAttribute('dir', dir)
 }
 
-let deferredPrompt
-
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault()
   deferredPrompt = e
 
   // Create install button
-  const installButton = document.createElement('button')
+  installButton = document.createElement('button')
   installButton.textContent = i18n.global.t('install')
 
   // Style the button
@@ -94,6 +101,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
       }
       deferredPrompt = null
       document.body.removeChild(installButton)
+      installButton = null // Remove the reference
     })
   })
 })
