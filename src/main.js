@@ -68,42 +68,60 @@ const updateDirection = () => {
 }
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault()
-  deferredPrompt = e
+  e.preventDefault();
+  deferredPrompt = e;
 
-  // Create install button
-  installButton = document.createElement('button')
-  installButton.textContent = i18n.global.t('install')
+  // إنشاء زر التثبيت
+  installButton = document.createElement('button');
+  installButton.textContent = i18n.global.t('install');
 
-  // Style the button
-  installButton.style.position = 'fixed'
-  installButton.style.bottom = '15px'
-  installButton.style.left = '50%'
-  installButton.style.transform = 'translate(-50%, -50%)'
-  installButton.style.padding = '10px 20px'
-  installButton.style.zIndex = '1000'
-  installButton.style.fontSize = '16px'
-  installButton.style.color = '#BB936A'
-  installButton.style.borderRadius = '20px'
-  installButton.style.backgroundColor = '#293340'
+  // تنسيق الزر
+  installButton.style.position = 'fixed';
+  installButton.style.bottom = '15px';
+  installButton.style.left = '50%';
+  installButton.style.transform = 'translate(-50%, -50%)';
+  installButton.style.padding = '10px 20px';
+  installButton.style.zIndex = '1000';
+  installButton.style.fontSize = '16px';
+  installButton.style.color = '#BB936A';
+  installButton.style.borderRadius = '20px';
+  installButton.style.backgroundColor = '#293340';
 
-  // Add the button to the DOM
-  document.body.appendChild(installButton)
+  // إضافة الزر إلى الـ DOM
+  document.body.appendChild(installButton);
+
+  // إضافة مستمع لحدث التمرير
+  window.addEventListener('scroll', () => {
+    if (installButton) {
+      const scrollPosition = window.scrollY;
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercentage = (scrollPosition / windowHeight) * 100;
+
+      if (scrollPercentage > 50) {
+        // إخفاء الزر
+        installButton.style.display = 'none';
+      } else {
+        // إظهار الزر
+        installButton.style.display = '';
+      }
+    }
+  });
 
   installButton.addEventListener('click', () => {
-    deferredPrompt.prompt()
+    deferredPrompt.prompt();
 
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt')
+        console.log('User accepted the install prompt');
       } else {
-        console.log('User dismissed the install prompt')
+        console.log('User dismissed the install prompt');
       }
-      deferredPrompt = null
-      document.body.removeChild(installButton)
-      installButton = null // Remove the reference
-    })
-  })
-})
+      deferredPrompt = null;
+      document.body.removeChild(installButton);
+      installButton = null; // إزالة المرجع
+    });
+  });
+});
+
 
 updateDirection()
