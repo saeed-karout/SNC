@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
+import { createApp, watch } from 'vue'
 import { createPinia } from 'pinia'
 import { createI18n } from 'vue-i18n'
 import App from './App.vue'
@@ -9,15 +9,14 @@ import './assets/main.css'
 import '../node_modules/flowbite-vue/dist/index.css'
 import { useDataStore } from './stores/useDataStore.js'
 
-// استيراد ملفات الترجمة
+// Import translation files
 import enMsg from '../src/plugins/locales/en.json'
 import arMsg from '../src/plugins/locales/ar.json'
-// import './registerServiceWorker'
 
-// إعداد i18n
+// Setup i18n
 const i18n = createI18n({
   legacy: false,
-  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "ar"}').language, // الافتراضي هو العربية
+  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "ar"}').language.toLowerCase(), // default is Arabic
   messages: {
     en: enMsg,
     ar: arMsg
@@ -26,79 +25,77 @@ const i18n = createI18n({
 
 const app = createApp(App)
 
-// إنشاء مثيل Pinia
+// Create Pinia instance
 const pinia = createPinia()
 
-// تسجيل مكون FontAwesomeIcon عالميًا
+// Register FontAwesomeIcon globally
 app.component('font-awesome-icon', FontAwesomeIcon)
 
-// استخدام i18n في التطبيق
+// Use i18n in the app
 app.use(i18n)
 app.use(router)
 app.use(pinia)
 
-// تثبيت تطبيق Vue في DOM
+// Mount the Vue app to the DOM
 app.mount('#app')
 
-
-// تحديث اللغة في i18n عند تغييرها من الـ store
+// Access the store
 const dataStore = useDataStore()
 
-dataStore.$subscribe((mutation, state) => {
-  // تحقق مما إذا كان الـ store الخاص بتغيير اللغة هو dataStore
-  if (mutation.storeId === 'dataStore' && mutation.events === 'language') {
-    // تعيين اللغة الجديدة بناءً على الحالة الجديدة
-    const newLocale = state.language === 'EN' ? 'en' : 'ar';
-    i18n.global.locale.value = newLocale;
-    updateDirection(); // تحديث اتجاه النص
-  }
-});
-
+// Watch the 'language' property directly
+watch(
+  () => dataStore.language,
+  (newLanguage) => {
+    const newLocale = newLanguage.toLowerCase()
+    i18n.global.locale.value = newLocale
+    updateDirection()
+  },
+  { immediate: true }
+)
 
 const updateDirection = () => {
-  const dir = dataStore.language === 'ar' ? 'rtl' : 'ltr';
-  document.documentElement.setAttribute('dir', dir);
-};
+  const dir = dataStore.language.toLowerCase() === 'ar' ? 'rtl' : 'ltr'
+  document.documentElement.setAttribute('dir', dir)
+}
 
-let deferredPrompt;
+let deferredPrompt
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
+  e.preventDefault()
+  deferredPrompt = e
 
-  // إنشاء زر التثبيت
-  const installButton = document.createElement('button');
-  installButton.textContent = i18n.global.t('install');
+  // Create install button
+  const installButton = document.createElement('button')
+  installButton.textContent = i18n.global.t('install')
 
-  // تطبيق التنسيقات على الزر
-  installButton.style.position = 'fixed';
-  installButton.style.bottom = '15px';
-  installButton.style.left = '50%';
-  installButton.style.transform = 'translate(-50%, -50%)';
-  installButton.style.padding = '10px 20px';
-  installButton.style.zIndex = '1000';
-  installButton.style.fontSize = '16px';
-  installButton.style.color = '#BB936A';
-  installButton.style.borderRadius = '20px';
-  installButton.style.backgroundColor = '#293340';
+  // Style the button
+  installButton.style.position = 'fixed'
+  installButton.style.bottom = '15px'
+  installButton.style.left = '50%'
+  installButton.style.transform = 'translate(-50%, -50%)'
+  installButton.style.padding = '10px 20px'
+  installButton.style.zIndex = '1000'
+  installButton.style.fontSize = '16px'
+  installButton.style.color = '#BB936A'
+  installButton.style.borderRadius = '20px'
+  installButton.style.backgroundColor = '#293340'
 
-  // إضافة الزر إلى الـ DOM
-  document.body.appendChild(installButton);
+  // Add the button to the DOM
+  document.body.appendChild(installButton)
 
   installButton.addEventListener('click', () => {
-    deferredPrompt.prompt();
+    deferredPrompt.prompt()
 
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
+        console.log('User accepted the install prompt')
       } else {
-        console.log('User dismissed the install prompt');
+        console.log('User dismissed the install prompt')
       }
-      deferredPrompt = null;
-      document.body.removeChild(installButton);
-    });
-  });
-});
+      deferredPrompt = null
+      document.body.removeChild(installButton)
+    })
+  })
+})
 
-
-updateDirection();
+updateDirection()
