@@ -4,8 +4,9 @@ import axios from 'axios';
 export const useDataStore = defineStore('dataStore', {
   state: () => ({
     data: [],
-    language: JSON.parse(localStorage.getItem('myAppData'))?.language || 'ar', // اللغة الافتراضية هي العربية
+    language: JSON.parse(localStorage.getItem('myAppData'))?.language || 'en', // Default language is English
   }),
+
   actions: {
     async fetchData() {
       const storedData = localStorage.getItem(`data_${this.language}`);
@@ -17,7 +18,7 @@ export const useDataStore = defineStore('dataStore', {
         try {
           const response = await axios.get('https://snc.shamnet.com.sa', {
             headers: {
-              'Accept-Language': this.language, 
+              'Accept-Language': this.language,
             },
           });
 

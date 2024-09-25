@@ -16,7 +16,7 @@ import arMsg from '../src/plugins/locales/ar.json'
 // Setup i18n
 const i18n = createI18n({
   legacy: false,
-  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "ar"}').language.toLowerCase(), // default is Arabic
+  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "en"}').language.toLowerCase(), // default is Arabic
   messages: {
     en: enMsg,
     ar: arMsg

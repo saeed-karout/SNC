@@ -31,7 +31,7 @@
           class="text-gray-700 hover:text-gray-900 text-lg dark:text-gray-300"
           aria-label="Toggle Language"
         >
-          {{ dataStore.language === 'ar' ? 'EN' : 'AR' }}
+          {{ dataStore.language === 'en' ? 'AR' : 'EN' }}
         </button>
 
         <button
@@ -82,7 +82,7 @@
           class="text-md text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
           aria-label="Toggle Language"
         >
-          {{ dataStore.language === 'ar' ? 'EN' : 'AR' }}
+          {{ dataStore.language === 'en' ? 'AR' : 'EN' }}
         </button>
       </div>
     </nav>
@@ -180,6 +180,7 @@ const toggleLanguage = () => {
     console.error('Invalid language:', newLanguage);
   }
 };
+
 const toggleMobileMenu = () => {
   mobileMenuOpen.value = !mobileMenuOpen.value;
 };
@@ -209,12 +210,13 @@ onMounted(() => {
       updateDirection();
     }
   } else {
-    dataStore.setLanguage('ar'); // اللغة الافتراضية
+    dataStore.setLanguage('en'); // Default language is English
   }
   dataStore.fetchData();
   updateDirection();
   window.addEventListener('scroll', handleScroll);
 });
+
 
 watch(() => dataStore.language, (newLang, oldLang) => {
   if (newLang !== oldLang) {
