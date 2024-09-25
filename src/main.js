@@ -16,8 +16,9 @@ import arMsg from '../src/plugins/locales/ar.json'
 // Setup i18n
 const i18n = createI18n({
   legacy: false,
-  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "en"}').language.toLowerCase(), // default is Arabic
-  messages: {
+  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "en"}').language.toLowerCase(), // default is
+
+messages: {
     en: enMsg,
     ar: arMsg
   }
@@ -86,7 +87,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   installButton.style.color = '#BB936A';
   installButton.style.borderRadius = '20px';
   installButton.style.backgroundColor = '#293340';
-
+  installButton.style.transition = 'opacity 0.5s ease';
   // إضافة الزر إلى الـ DOM
   document.body.appendChild(installButton);
 
@@ -99,13 +100,17 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
       if (scrollPercentage > 50) {
         // إخفاء الزر
-        installButton.style.display = 'none';
+        installButton.style.opacity = '0';
+        installButton.style.pointerEvents = 'none';
       } else {
         // إظهار الزر
-        installButton.style.display = '';
+        installButton.style.opacity = '1';
+        installButton.style.pointerEvents = 'auto';
       }
+
     }
   });
+
 
   installButton.addEventListener('click', () => {
     deferredPrompt.prompt();
