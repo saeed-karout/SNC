@@ -87,7 +87,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   installButton.style.color = '#BB936A';
   installButton.style.borderRadius = '20px';
   installButton.style.backgroundColor = '#293340';
-  installButton.style.transition = 'opacity 0.5s ease';
+  installButton.style.transition = 'opacity 1s ease';
   // إضافة الزر إلى الـ DOM
   document.body.appendChild(installButton);
 
@@ -99,11 +99,11 @@ window.addEventListener('beforeinstallprompt', (e) => {
       const scrollPercentage = (scrollPosition / windowHeight) * 100;
 
       if (scrollPercentage > 50) {
-        // إخفاء الزر
+        // hidden
         installButton.style.opacity = '0';
         installButton.style.pointerEvents = 'none';
       } else {
-        // إظهار الزر
+      //  show
         installButton.style.opacity = '1';
         installButton.style.pointerEvents = 'auto';
       }
