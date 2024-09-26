@@ -7,7 +7,7 @@ export default {
   content: [
     './index.html',
     './src/**/*.{vue,js,ts,jsx,tsx}',
- 
+     './node_modules/@ipaat/vue3-tailwind3-cookie-comply/dist/vue3-tailwind3-cookie-comply.umd.js',
      'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx,vue}',
     'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'
   ],

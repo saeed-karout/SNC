@@ -69,7 +69,13 @@
 
     }
     ,
-     
+     "cookieConsent": {
+    "message": "We use cookies to enhance your experience on our website. By continuing to browse, you agree to our use of cookies.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "learnMore": "Learn More"
+  },
+  "privacyPolicy": "Privacy Policy",
     "footer":{
         "title":"S.N.C Contracting",
         "links":{

@@ -13,6 +13,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
+    "@ipaat/vue3-tailwind3-cookie-comply": "^1.1.2",
     "axios": "^1.7.3",
     "flowbite-vue": "^0.1.5",
     "idb": "^8.0.0",

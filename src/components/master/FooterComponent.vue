@@ -89,12 +89,7 @@
                 <!-- Right Column: Map -->
                 <div class="">
                     <div class="map-container">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d226.4872564586018!2d46.757482785309676!3d24.733879353303628!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e2ee32a7e7e3233%3A0x160dc46ac045c22c!2z2LTYsdmD2Kkg2LTYqNmD2Kkg2KfZhNi02KfZhSDZhNmE2YXZgtin2YjZhNin2Ko!5e0!3m2!1sar!2snl!4v1724571034205!5m2!1sar!2snl"
-                            class="map-frame" allowfullscreen="" loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade">
-                        </iframe>
-
+                       <GoogleMapsWidget />
 
                     </div>
                 </div>
@@ -137,6 +132,7 @@
     import {
         useI18n
     } from 'vue-i18n'
+import GoogleMapsWidget from '../GoogleMapsWidget.vue';
     const {
         t
     } = useI18n()

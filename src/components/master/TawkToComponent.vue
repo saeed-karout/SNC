@@ -1,64 +1,72 @@
-<!-- TawkToWidget.vue -->
+<!-- src/components/TawkToWidget.vue -->
 <template>
   <div></div>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, watch, ref } from 'vue';
+import { onMounted, watch, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { useCookieConsent } from '../../composables/useCookieConsent';
 
 const route = useRoute();
-let scriptElement = null;
-const isWidgetLoaded = ref(false);
+const { isConsentGiven } = useCookieConsent();
+
+const isScriptLoaded = ref(false);
 
 const loadTawkToScript = () => {
-  if (!scriptElement) {
+  if (!isScriptLoaded.value && isConsentGiven.value) { // إزالة شرط المسار
     window.Tawk_API = window.Tawk_API || {};
     window.Tawk_LoadStart = new Date();
 
-    // استخدام onLoad لضمان أن الودجت جاهز قبل محاولة التحكم به
-    window.Tawk_API.onLoad = function() {
-      isWidgetLoaded.value = true;
-      // تطبيق الحالة الأولية بناءً على المسار الحالي
-      if (route.path === '/') {
-        window.Tawk_API.hideWidget();
-      } else {
-        window.Tawk_API.showWidget();
-      }
-    };
-
-    scriptElement = document.createElement("script");
-    var s0 = document.getElementsByTagName("script")[0];
+    const scriptElement = document.createElement("script");
     scriptElement.async = true;
     scriptElement.src = 'https://embed.tawk.to/66c5d452ea492f34bc088125/1i5qcaphk';
     scriptElement.charset = 'UTF-8';
     scriptElement.setAttribute('crossorigin', '*');
-    s0.parentNode.insertBefore(scriptElement, s0);
+    scriptElement.onload = () => {
+      isScriptLoaded.value = true;
+      setWidgetVisibility(route.path);
+    };
+    document.body.appendChild(scriptElement);
+  }
+};
+
+const setWidgetVisibility = (path) => {
+  if (window.Tawk_API && window.Tawk_API.showWidget && window.Tawk_API.hideWidget) {
+    window.Tawk_API.showWidget(); // إظهار الودجت في جميع الصفحات
   }
 };
 
 onMounted(() => {
+  // تحميل السكربت إذا تمت الموافقة
   loadTawkToScript();
 
+  // مراقبة التغييرات في حالة الموافقة
   watch(
-    [() => route.path, isWidgetLoaded],
-    ([newPath, widgetLoaded]) => {
-      if (widgetLoaded) {
-        if (newPath !== '/') {
-          window.Tawk_API.showWidget();
-        } else {
+    () => isConsentGiven.value,
+    (isAllowed) => {
+      if (isAllowed && !isScriptLoaded.value) {
+        loadTawkToScript();
+      } else if (!isAllowed && isScriptLoaded.value) {
+        if (window.Tawk_API && window.Tawk_API.hideWidget) {
           window.Tawk_API.hideWidget();
         }
+        // لا يمكن إزالة السكربت بسهولة بعد تحميله، لكن يمكن تجاهل استخدامه
       }
     },
     { immediate: true }
   );
-});
 
-onUnmounted(() => {
-  // إخفاء الودجت عند إلغاء تحميل المكون
-  if (window.Tawk_API && window.Tawk_API.hideWidget) {
-    window.Tawk_API.hideWidget();
-  }
+  // مراقبة التغييرات في المسار لضبط ظهور الودجت
+  watch(
+    () => route.path,
+    (newPath) => {
+      setWidgetVisibility(newPath);
+    }
+  );
 });
 </script>
+
+<style scoped>
+/* يمكنك إضافة تخصيصات إضافية هنا إذا لزم الأمر */
+</style>

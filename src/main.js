@@ -36,6 +36,7 @@ app.use(i18n)
 app.use(router)
 app.use(pinia)
 
+
 // تثبيت تطبيق Vue في الـ DOM
 app.mount('#app')
 
@@ -85,7 +86,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   installButton.style.left = '50%'
   installButton.style.transform = 'translate(-50%, -50%)'
   installButton.style.padding = '10px 20px'
-  installButton.style.zIndex = '1000'
+  installButton.style.zIndex = '49'
   installButton.style.fontSize = '16px'
   installButton.style.color = '#BB936A'
   installButton.style.borderRadius = '20px'
