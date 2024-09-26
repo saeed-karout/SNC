@@ -9,16 +9,15 @@ import './assets/main.css'
 import '../node_modules/flowbite-vue/dist/index.css'
 import { useDataStore } from './stores/useDataStore.js'
 
-// Import translation files
+// استيراد ملفات الترجمة
 import enMsg from '../src/plugins/locales/en.json'
 import arMsg from '../src/plugins/locales/ar.json'
 
-// Setup i18n
+// إعداد i18n
 const i18n = createI18n({
   legacy: false,
-  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "en"}').language.toLowerCase(), // default is
-
-messages: {
+  locale: JSON.parse(localStorage.getItem('myAppData') || '{"language": "en"}').language.toLowerCase(),
+  messages: {
     en: enMsg,
     ar: arMsg
   }
@@ -26,28 +25,37 @@ messages: {
 
 const app = createApp(App)
 
-// Create Pinia instance
+// إنشاء مثيل Pinia
 const pinia = createPinia()
 
-// Register FontAwesomeIcon globally
+// تسجيل FontAwesomeIcon بشكل عام
 app.component('font-awesome-icon', FontAwesomeIcon)
 
-// Use i18n in the app
+// استخدام i18n في التطبيق
 app.use(i18n)
 app.use(router)
 app.use(pinia)
 
-// Mount the Vue app to the DOM
+// تثبيت تطبيق Vue في الـ DOM
 app.mount('#app')
 
-// Access the store
+// الوصول إلى المتجر
 const dataStore = useDataStore()
 
-// Store references to the install button and deferred prompt
+// **نقل تعريف `installButton` و `deferredPrompt` قبل استخدامهما**
 let installButton = null
 let deferredPrompt = null
 
-// Watch the 'language' property directly
+// تعريف دالة updateDirection قبل استخدامها
+const updateDirection = () => {
+  const dir = dataStore.language.toLowerCase() === 'ar' ? 'rtl' : 'ltr'
+  document.documentElement.setAttribute('dir', dir)
+}
+
+// استدعاء updateDirection في البداية لضبط الاتجاه عند تحميل التطبيق
+updateDirection()
+
+// مراقبة خاصية 'language' مباشرةً
 watch(
   () => dataStore.language,
   (newLanguage) => {
@@ -55,7 +63,7 @@ watch(
     i18n.global.locale.value = newLocale
     updateDirection()
 
-    // Update the installButton text if it exists
+    // تحديث نص زر التثبيت إذا كان موجودًا
     if (installButton) {
       installButton.textContent = i18n.global.t('install')
     }
@@ -63,70 +71,61 @@ watch(
   { immediate: true }
 )
 
-const updateDirection = () => {
-  const dir = dataStore.language.toLowerCase() === 'ar' ? 'rtl' : 'ltr'
-  document.documentElement.setAttribute('dir', dir)
-}
-
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
+  e.preventDefault()
+  deferredPrompt = e
 
   // إنشاء زر التثبيت
-  installButton = document.createElement('button');
-  installButton.textContent = i18n.global.t('install');
+  installButton = document.createElement('button')
+  installButton.textContent = i18n.global.t('install')
 
   // تنسيق الزر
-  installButton.style.position = 'fixed';
-  installButton.style.bottom = '15px';
-  installButton.style.left = '50%';
-  installButton.style.transform = 'translate(-50%, -50%)';
-  installButton.style.padding = '10px 20px';
-  installButton.style.zIndex = '1000';
-  installButton.style.fontSize = '16px';
-  installButton.style.color = '#BB936A';
-  installButton.style.borderRadius = '20px';
-  installButton.style.backgroundColor = '#293340';
-  installButton.style.transition = 'opacity 1s ease';
+  installButton.style.position = 'fixed'
+  installButton.style.bottom = '15px'
+  installButton.style.left = '50%'
+  installButton.style.transform = 'translate(-50%, -50%)'
+  installButton.style.padding = '10px 20px'
+  installButton.style.zIndex = '1000'
+  installButton.style.fontSize = '16px'
+  installButton.style.color = '#BB936A'
+  installButton.style.borderRadius = '20px'
+  installButton.style.backgroundColor = '#293340'
+  installButton.style.transition = 'opacity 1s ease'
+
   // إضافة الزر إلى الـ DOM
-  document.body.appendChild(installButton);
+  document.body.appendChild(installButton)
 
   // إضافة مستمع لحدث التمرير
   window.addEventListener('scroll', () => {
     if (installButton) {
-      const scrollPosition = window.scrollY;
-      const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercentage = (scrollPosition / windowHeight) * 100;
+      const scrollPosition = window.scrollY
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrollPercentage = (scrollPosition / windowHeight) * 100
 
       if (scrollPercentage > 50) {
-        // hidden
-        installButton.style.opacity = '0';
-        installButton.style.pointerEvents = 'none';
+        // إخفاء الزر
+        installButton.style.opacity = '0'
+        installButton.style.pointerEvents = 'none'
       } else {
-      //  show
-        installButton.style.opacity = '1';
-        installButton.style.pointerEvents = 'auto';
+        // إظهار الزر
+        installButton.style.opacity = '1'
+        installButton.style.pointerEvents = 'auto'
       }
-
     }
-  });
-
+  })
 
   installButton.addEventListener('click', () => {
-    deferredPrompt.prompt();
+    deferredPrompt.prompt()
 
     deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
+        console.log('User accepted the install prompt')
       } else {
-        console.log('User dismissed the install prompt');
+        console.log('User dismissed the install prompt')
       }
-      deferredPrompt = null;
-      document.body.removeChild(installButton);
-      installButton = null; // إزالة المرجع
-    });
-  });
-});
-
-
-updateDirection()
+      deferredPrompt = null
+      document.body.removeChild(installButton)
+      installButton = null // إزالة المرجع
+    })
+  })
+})

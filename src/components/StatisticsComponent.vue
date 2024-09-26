@@ -5,12 +5,12 @@
       <hr class="my-4 mt-8 border-t-2 w-1/3 mx-auto border-gray-300 dark:border-yellow-500 mb-12">
       
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-center">
-        <div v-for="stat in statistics" :key="stat.label" class="stat-item">
+        <div v-for="stat in statistics" :key="stat.labelKey" class="stat-item">
           <div v-if="stat.type === 'icon'" class="icon-container mb-4">
             <FontAwesomeIcon :icon="stat.icon" class="text-5xl text-[#304452] dark:text-[#476072]" />
           </div>
           <p class="text-5xl font-extrabold counter opacity-70">{{ stat.currentValue }}</p>
-          <p class="text-xl font-medium mt-2 text-[#B99269]">{{ stat.label }}</p>
+          <p class="text-xl font-medium mt-2 text-[#B99269]">{{ t(stat.labelKey) }}</p>
         </div>
       </div>
     </div>
@@ -26,16 +26,16 @@ import { faHouseLaptop, faBuilding, faMoneyBillTrendUp, faCheck } from '@fortawe
 const { t } = useI18n();
 
 const statistics = ref([
-  { label: 'Offices', value: 2500, currentValue: 0, icon: faHouseLaptop, type: 'icon' },
-  { label: 'M² Built-up Area', value: 1200, currentValue: 0, icon: faBuilding, type: 'icon' },
-  { label: 'M² Plot Area', value: 1500, currentValue: 0, icon: faMoneyBillTrendUp, type: 'icon' },
-  { label: 'Projects Completed', value: 2500, currentValue: 0, icon: faCheck, type: 'icon' }
+  { labelKey: 'Statistics.offices', value: 2500, currentValue: 0, icon: faHouseLaptop, type: 'icon' },
+  { labelKey: 'Statistics.builtUpArea', value: 1200, currentValue: 0, icon: faBuilding, type: 'icon' },
+  { labelKey: 'Statistics.plotArea', value: 1500, currentValue: 0, icon: faMoneyBillTrendUp, type: 'icon' },
+  { labelKey: 'Statistics.projectsCompleted', value: 2500, currentValue: 0, icon: faCheck, type: 'icon' }
 ]);
 
 const statisticsSection = ref(null);
 
 const countUp = (stat) => {
-  const duration = 2000; // مدة ثابتة
+  const duration = 2000; // Fixed duration
   const stepTime = duration / stat.value;
   let current = 0;
 
@@ -43,7 +43,7 @@ const countUp = (stat) => {
     current += 1;
     stat.currentValue = Math.min(current, stat.value);
     if (current < stat.value) {
-      setTimeout(updateCounter, stepTime); // استخدم setTimeout لتقليل الضغط
+      setTimeout(updateCounter, stepTime); // Use setTimeout to reduce pressure
     }
   };
 
@@ -68,6 +68,7 @@ onMounted(() => {
 .statistics-section {
   padding-top: 4rem;
   padding-bottom: 4rem;
+  direction: ltr;
 }
 
 .stat-item {

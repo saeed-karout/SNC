@@ -37,6 +37,10 @@ export default defineConfig({
           },
         ],
       },
+        build: {
+    sourcemap: true,
+     minify: false,
+  },
       manifest: {
         name: 'SNC Contracting',
         short_name: 'SNC',

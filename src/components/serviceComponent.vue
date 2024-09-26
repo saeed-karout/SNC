@@ -17,14 +17,14 @@
   class="p-4 flex flex-col justify-center items-center relative cursor-pointer"
           :class="getBorderClass(index)"
         >
-          <Fwb-card img-alt="Desk" class="flex flex-col justify-center items-center" variant="image">
+          <div img-alt="Desk" class="flex flex-col justify-center items-center" variant="image">
             <img :src="feature.main_image || '/path/to/default/image.jpg'" loading="lazy" class="w-[350px] h-48" style="border-radius: 15px;" alt="">
             <div class="p-5">
               <p class="mb-2 text-2xl font-bold tracking-tight text-[#304452] dark:text-[#B99269]">
                 {{ feature.name }}
               </p>
             </div>
-          </Fwb-card>
+          </div>
         </router-link>
       </div>
     </div>

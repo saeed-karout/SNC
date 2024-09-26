@@ -12,10 +12,10 @@ import TawkToWidget from './components/master/TawkToComponent.vue'; // Importing
 <template>
   <div>
     <NavbarComponent />  <!-- Navbar App -->
-    <RouterView />       <!-- Children -->
+         <RouterView />       <!-- Children -->
     <FooterComponent />  <!-- Footer -->
     <UpToTopCom />       <!-- Up icon to top -->
-    <TawkToWidget /> 
+    <TawkToWidget  /> 
          <!-- Live chat component -->
   </div>
 </template>

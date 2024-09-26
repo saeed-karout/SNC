@@ -29,9 +29,7 @@
         
     },
     
-    "Statistics":{
-        "title":"Our Company Statistics"
-    },
+   
     "news":{
         "title":"Our News"
     },
@@ -59,10 +57,10 @@
         }
     },
     "slogans": {
-        "slogan1": "We are Sham Network Contracting",
-        "slogan2": "From Planning to Execution",
-        "slogan3": "High standards of safety and quality",
-        "slogan4": "Integrated Building Solutions"
+        "slogan1": "Welcome to SNC contracting",
+        "slogan2": "Where experience meets innovation",
+        "slogan3": "Crafting your dream vision",
+        "slogan4": "Your success partner"
     },
     "buttons": {
         "getStarted": "Contact Us",
@@ -88,5 +86,12 @@
     
     }
     ,
-    "install":"install App SNC"
+    "install":"install App SNC",
+    "Statistics": {
+    "title": "Our Statistics",
+    "offices": "Offices",
+    "builtUpArea": "M² Built-up Area",
+    "plotArea": "M² Plot Area",
+    "projectsCompleted": "Projects Completed"
+  }
 }
