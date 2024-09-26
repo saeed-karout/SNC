@@ -128,7 +128,7 @@
                     </template>
                 </div>
                 <!-- Carousel indicators -->
-                <div class="absolute z-30 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
+                <div class="absolute z-10 flex space-x-3 -translate-x-1/2 bottom-5 left-1/2">
                     <template v-for="indicator in carouselIndicators" :key="indicator.id">
                         <button :id="indicator.id" type="button" class="w-3 h-3 rounded-full" aria-current="true"
                             :aria-label="`Slide ${indicator.position}`"></button>

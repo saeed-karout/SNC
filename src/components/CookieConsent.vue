@@ -4,21 +4,21 @@
     <div 
       v-if="!isAccepted && showConsent" 
       :class="[
-        'fixed bottom-4 w-[97vw] max-w-lg justify-center right-4 bg-white dark:bg-secondary shadow-lg p-3 text-md rounded-md flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4'
+        'fixed bottom-4 w-[97vw] sm:max-w-full md:max-w-lg md:right-2 justify-end     bg-white dark:bg-secondary  p-3 text-md z-50 rounded-md flex flex-col md:flex-row items-center space-y-2 md:space-y-0  ' 
       ]" 
-      :style="{ direction: locale.value === 'ar' ? 'rtl' : 'ltr' }"
+      :style="{ direction: locale.value === 'ar' ? 'ltr' : 'ltr' }"
     >
       <p class="text-gray-700 dark:text-white">{{ message }}</p>
       <div class="flex space-x-2 mx-2">
         <button 
           @click="accept" 
-          class="bg-secondary text-primary px-4 py-2 rounded hover:bg-gray-600 transition"
+          class="bg-secondary text-primary px-4 py-2 shadow-2xl rounded hover:bg-gray-600 transition"
         >
           {{ $t('cookieConsent.accept') }}
         </button>
         <button 
           @click="decline" 
-          class="bg-secondary text-red-500 px-4 py-2 rounded hover:bg-gray-600 transition"
+          class="bg-secondary text-red-500 px-4 py-2 shadow-2xl rounded hover:bg-gray-600 transition"
         >
           {{ $t('cookieConsent.decline') }}
         </button>
