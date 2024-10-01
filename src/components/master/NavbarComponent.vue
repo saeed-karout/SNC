@@ -4,13 +4,13 @@
       <!-- Logo Section -->
       <div class="flex lg:flex-1">
         <router-link to="/">
-          <img class="logo" :src="logoSrc" alt="Company Logo" />
+          <img class="logo" :src="logoSrc"  alt="Company Logo" />
         </router-link>
       </div>
 
       <!-- Mobile Menu Buttons -->
       <div class="flex lg:hidden gap-6 items-center">
-        <!-- تعديل زر تغيير الوضع مع الأنيميشن -->
+        
         <button
           @click="toggleDarkModeWithAnimation"
           class="text-gray-700 hover:text-gray-900 dark:text-primary relative transition-all duration-500 transform hover:scale-110"

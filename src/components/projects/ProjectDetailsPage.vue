@@ -1,170 +1,194 @@
 <script setup>
-    import {
-        ref,
-        onMounted,
-        watch
-    } from 'vue';
-    import {
-        useRoute,
-        useRouter
-    } from 'vue-router';
-    import LandingScreen from '../master/LandingScreen.vue';
-    import {
-        BASE_URL
-    } from '@/config';
-    import {
-        useI18n
-    } from 'vue-i18n';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import LandingScreen from '../master/LandingScreen.vue';
+import { BASE_URL } from '@/config';
+import { useI18n } from 'vue-i18n';
 
-    const allProjects = ref([]);
-    const selectedProject = ref(null);
-    const selectedProjectId = ref(null);
-    const selectedImage = ref(null);
-    const isFullscreen = ref(false);
-    const isSidebarVisible = ref(false); // حالة إظهار/إخفاء الـ Sidebar
-    const screenWidth = ref(window.innerWidth);
-    const loading = ref(true); // حالة التحميل
+const allProjects = ref([]);
+const selectedProject = ref(null);
+const selectedProjectId = ref(null);
+const selectedImage = ref(null);
+const isFullscreen = ref(false);
+const isSidebarVisible = ref(false);
+const screenWidth = ref(window.innerWidth);
+const loading = ref(true);
 
-    const route = useRoute();
-    const router = useRouter();
-    const {
-        locale,
-        t
-    } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const { locale, t } = useI18n();
 
-    const isImageLoading = ref(true); // حالة تحميل الصورة
+const isImageLoading = ref(true);
 
-    window.addEventListener('resize', () => {
-        screenWidth.value = window.innerWidth;
-    });
+// تحديث عرض الشاشة عند تغيير الحجم
+window.addEventListener('resize', () => {
+    screenWidth.value = window.innerWidth;
+});
 
-    async function fetchProjects() {
-        loading.value = true;
-        try {
-            const response = await fetch(`${BASE_URL}/projects`, {
-                headers: {
-                    'Accept-Language': locale.value,
-                },
-            });
-            const data = await response.json();
-            allProjects.value = data.data;
-        } catch (error) {
-            console.error('Error fetching projects:', error);
-        } finally {
-            loading.value = false;
+// دالة لجلب المشاريع
+async function fetchProjects() {
+    loading.value = true;
+    try {
+        const response = await fetch(`${BASE_URL}/projects`, {
+            headers: {
+                'Accept-Language': locale.value,
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    }
+        const data = await response.json();
 
-    async function goToProject(projectId) {
-        selectedProjectId.value = projectId;
-        loading.value = true;
-        try {
-            const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
-                headers: {
-                    'Accept-Language': locale.value,
-                },
-            });
-            const data = await response.json();
-            selectedProject.value = data.data;
-            selectedImage.value = selectedProject.value.images ? selectedProject.value.images[0] : null;
-            router.push(`/projects/${projectId}`);
-        } catch (error) {
-            console.error('Error fetching project details:', error);
-        } finally {
-            loading.value = false;
-            isSidebarVisible.value = false; // إغلاق الـ Sidebar بعد اختيار مشروع
+        // التحقق من أن data.data هي مصفوفة
+        if (!Array.isArray(data.data)) {
+            throw new Error('Invalid data format: data.data is not an array');
         }
-    }
 
-    function toggleSidebar() {
-        isSidebarVisible.value = !isSidebarVisible.value;
+        allProjects.value = data.data;
+        console.log('Fetched projects:', allProjects.value);
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        allProjects.value = []; // تعيين مصفوفة فارغة في حالة الخطأ
+    } finally {
+        loading.value = false;
     }
+}
 
-    // عند اختيار صورة جديدة من الصور المصغرة
-    function selectImage(image) {
+// دالة لجلب تفاصيل مشروع محدد
+async function goToProject(projectId) {
+    console.log('Fetching project details for ID:', projectId);
+    selectedProjectId.value = projectId;
+    loading.value = true;
+    try {
+        const response = await fetch(`${BASE_URL}/projects/${projectId}`, {
+            headers: {
+                'Accept-Language': locale.value,
+            },
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        // التحقق من أن data.data هو كائن
+        if (!data.data || typeof data.data !== 'object') {
+            throw new Error('Invalid data format: data.data is not an object');
+        }
+
+        selectedProject.value = data.data;
+        selectedImage.value = selectedProject.value.images ? selectedProject.value.images[0] : null;
+        router.push(`/projects/${projectId}`);
+        console.log('Selected project:', selectedProject.value);
+    } catch (error) {
+        console.error('Error fetching project details:', error);
+        selectedProject.value = null; // تعيين null في حالة الخطأ
+    } finally {
+        loading.value = false;
+        isSidebarVisible.value = false;
+    }
+}
+
+function toggleSidebar() {
+    isSidebarVisible.value = !isSidebarVisible.value;
+}
+
+function selectImage(image) {
+    if (image) {
         selectedImage.value = image;
-        isImageLoading.value = true; // إعادة ضبط حالة التحميل عند اختيار صورة جديدة
+        isImageLoading.value = true;
+    } else {
+        console.error('Selected image is null or undefined');
     }
+}
 
-    function toggleFullscreen() {
-        isFullscreen.value = !isFullscreen.value;
+function toggleFullscreen() {
+    isFullscreen.value = !isFullscreen.value;
+}
+
+function prevImage() {
+    if (!selectedProject.value || !selectedProject.value.images) return;
+    const index = selectedProject.value.images.indexOf(selectedImage.value);
+    if (index > 0) {
+        selectedImage.value = selectedProject.value.images[index - 1];
+        isImageLoading.value = true;
     }
+}
 
-    function prevImage() {
-        const index = selectedProject.value.images.indexOf(selectedImage.value);
-        if (index > 0) {
-            selectedImage.value = selectedProject.value.images[index - 1];
-        }
+function nextImage() {
+    if (!selectedProject.value || !selectedProject.value.images) return;
+    const index = selectedProject.value.images.indexOf(selectedImage.value);
+    if (index < selectedProject.value.images.length - 1) {
+        selectedImage.value = selectedProject.value.images[index + 1];
+        isImageLoading.value = true;
     }
+}
 
-    function nextImage() {
-        const index = selectedProject.value.images.indexOf(selectedImage.value);
-        if (index < selectedProject.value.images.length - 1) {
-            selectedImage.value = selectedProject.value.images[index + 1];
-        }
+// جلب المشاريع عند تحميل الصفحة
+onMounted(async () => {
+    await fetchProjects();
+    const projectId = route.params.id;
+    if (projectId) {
+        await goToProject(projectId);
     }
+});
 
-    onMounted(async () => {
-        await fetchProjects();
-        const projectId = route.params.id;
-        if (projectId) {
-            goToProject(projectId);
-        }
-    });
+// مراقبة تغيير معرف المشروع في الرابط
+watch(() => route.params.id, (newId) => {
+    if (newId) {
+        goToProject(newId);
+    }
+});
 
-    watch(() => route.params.id, (newId) => {
-        if (newId) {
-            goToProject(newId);
-        }
-    });
-
-    watch(locale, () => {
-        fetchProjects();
-        if (selectedProjectId.value) {
-            goToProject(selectedProjectId.value);
-        }
-    });
+// مراقبة تغيير اللغة
+watch(locale, () => {
+    fetchProjects();
+    if (selectedProjectId.value) {
+        goToProject(selectedProjectId.value);
+    }
+});
 </script>
 
 <template>
     <div class="flex">
+        <!-- زر فتح وإغلاق الـ Sidebar -->
         <button @click="toggleSidebar" class="custom-btn" :class="{ 'is-sidebar-closed': !isSidebarVisible }">
-            <div class="flex flex-col items-center">
-                <font-awesome-icon icon="fa-solid fa-trowel" class="fa-icon" />
-                <p class="hidden md:block">{{ t(`projects.title`) }}</p>
+            <div class="flex flex-col items-center rounded">
+                <font-awesome-icon icon="fa-solid fa-building" class="fa-icon" />
+                <p class="hidden md:block">{{ t('projects.title') }}</p>
             </div>
         </button>
 
         <!-- Sidebar لعرض قائمة المشاريع -->
         <div
             :class="['fixedSidebar top-0 left-0 h-full bg-white dark:bg-secondaryDark text-white p-4 transition-transform',
-                { 'transform translate-x-0 ': isSidebarVisible, 'transform -translate-x-full': !isSidebarVisible }
+                { 'transform translate-x-0': isSidebarVisible, 'transform -translate-x-full': !isSidebarVisible }
             ]">
-            <h2 class="text-4xl font-bold my-10 text-center text-primary">{{ t(`projects.title`) }}</h2>
+            <h2 class="text-4xl font-bold my-10 text-center text-primary">{{ t('projects.title') }}</h2>
             <nav class="space-y-4">
                 <button v-for="project in allProjects" :key="project.id" @click="goToProject(project.id)"
-                    :class="['w-full p-4 rounded-lg text-center bg-secondary opacity-45',
-                        selectedProjectId.value === project.id ?
+                    :class="['w-full p-4 rounded-lg text-center bg-secondary text-xl opacity-45',
+                        selectedProjectId === project.id ?
                         'bg-gray-400 text-white' :
                         'bg-gray-700 hover:bg-gray-600'
                     ]">
-                    {{ project . name }}
+                    {{ project.name }}
                 </button>
             </nav>
         </div>
 
         <!-- Container يعرض تفاصيل المشروع -->
         <div class="flex-1 p-4 lg:p-8 mt-8 lg:mt-18">
+            <!-- حالة التحميل -->
             <div v-if="loading" class="flex justify-center items-center h-full">
                 <div class="text-xl font-semibold">
                     <LandingScreen />
                 </div>
             </div>
 
+            <!-- تفاصيل المشروع عند توفرها -->
             <div v-else-if="selectedProject"
                 class="project-box mx-auto p-6 bg-white dark:bg-secondaryDark rounded-lg shadow-md max-w-4xl lg:max-w-6xl">
-                <h2 class="text-3xl lg:text-4xl font-bold text-[#B99269] text-center mb-16">{{ selectedProject . name }}
-                </h2>
+                <h2 class="text-3xl lg:text-4xl font-bold text-[#B99269] text-center mb-16">{{ selectedProject.name }}</h2>
 
                 <div class="flex flex-col lg:flex-row gap-4 lg:gap-8 items-center">
                     <!-- Main Image -->
@@ -196,20 +220,20 @@
 
                     <!-- Project Description -->
                     <div class="flex-1 flex-col max-w-lg">
-                        <p class="dark:text-white leading-relaxed mb-6">{{ selectedProject . description }}</p>
+                        <p class="dark:text-white leading-relaxed mb-6">{{ selectedProject.description }}</p>
 
                         <div class="flex flex-col gap-4">
                             <hr class="border-b border-[#6F7782] dark:border-yellow-500 w-full mb-4">
-                            <div class="flex flex-row lg:flex-row justify-between " style="align-items: normal;">
+                            <div class="flex flex-row lg:flex-row justify-between" style="align-items: normal;">
                                 <div class="text-center">
                                     <h3 class="text-lg dark:text-white font-semibold opacity-75">
-                                        {{ t(`projects.start`) }}</h3>
-                                    <p class="text-sm dark:text-white">{{ selectedProject . starting_date }}</p>
+                                        {{ t('projects.start') }}</h3>
+                                    <p class="text-sm dark:text-white">{{ selectedProject.starting_date }}</p>
                                 </div>
                                 <div class="text-center">
-                                    <h3 class="text-lg dark:text-white font-semibold opacity-75">{{ t(`projects.end`) }}
+                                    <h3 class="text-lg dark:text-white font-semibold opacity-75">{{ t('projects.end') }}
                                     </h3>
-                                    <p class="text-sm dark:text-white">{{ selectedProject . ending_date }}</p>
+                                    <p class="text-sm dark:text-white">{{ selectedProject.ending_date }}</p>
                                 </div>
                             </div>
                         </div>
@@ -231,10 +255,14 @@
                     class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-70 text-white text-3xl font-bold px-2 py-1"
                     @click="nextImage" style="direction: ltr;">❯</button>
             </div>
+
+            <!-- رسالة في حال عدم وجود مشروع محدد -->
+            <div v-else-if="!loading && !selectedProject" class="text-center my-8">
+                <p class="text-gray-600">No project selected.</p>
+            </div>
         </div>
     </div>
 </template>
-
 
 <style scoped>
     /* Fullscreen Image View */
@@ -261,7 +289,7 @@
     /* Sidebar تنسيقات */
     .fixedSidebar {
         position: fixed;
-        top: 10%;
+        top: 11.5%;
         left: 0;
         height: 90vh;
         width: 16rem;

@@ -2,14 +2,14 @@
   <div class="flex ">
     <!-- Sidebar -->
     <div class="w-64 bg-gray-800 text-[#B99269] p-4 ">
-      <h2 class="text-2xl font-bold mb-6">Projects</h2>
+      <h2 class="text-xl font-bold mb-6">Projects</h2>
       <nav class="space-y-4">
         <button
           v-for="project in allProjects"
           :key="project.id"
           @click="goToProject(project.id)"
           :class="[
-            'w-full p-4 rounded-lg opacity-80 transition-colors duration-300',
+            'w-full text-xl p-4 rounded-lg opacity-80 transition-colors duration-300',
             selectedProjectId === project.id ? 'bg-gray-600 text-white' : 'bg-gray-700 hover:bg-gray-600 text-[#B99269]'
           ]"
         >

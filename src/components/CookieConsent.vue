@@ -4,7 +4,7 @@
     <div 
       v-if="!isAccepted && showConsent" 
       :class="[
-        'fixed bottom-4 w-[97vw] sm:max-w-full md:max-w-lg md:right-2 justify-end     bg-white dark:bg-secondary  p-3 text-md z-50 rounded-md flex flex-col md:flex-row items-center space-y-2 md:space-y-0  ' 
+        'fixed bottom-4  w-[97vw] sm:max-w-full md:max-w-lg  justify-end     bg-white dark:bg-secondary  p-3 text-md z-50 rounded-md flex flex-col md:flex-row items-center space-y-2 md:space-y-0  ' 
       ]" 
       :style="{ direction: locale.value === 'ar' ? 'ltr' : 'ltr' }"
     >
