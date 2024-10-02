@@ -6,7 +6,7 @@
           {{ t('contactUs.title') }}
         </h1>
         <hr class="my-4 mt-8 border-t-2 border-gray-300 dark:border-yellow-500 w-1/3 mx-auto">
-        <div class="mx-auto  mt-5 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto mt-5 px-4 sm:px-6 lg:px-8">
           <div class="grid lg:grid-cols-2 grid-cols-1">
             <!-- Contact Information -->
             <div>
@@ -47,11 +47,11 @@
               <!-- Success Message -->
               <div v-if="successMessage" class="flex justify-between bg-teal-100 border border-teal-400 text-teal-700 px-4 py-3 my-2 rounded" role="alert">
                 <span class="block sm:inline">
-                  <strong class="font-bold">Success:</strong> {{ successMessage }}
+                  <strong class="font-bold">{{ t('contactUs.success') }}</strong>
                 </span>
                 <span class="cursor-pointer" @click="successMessage = null">
                   <svg class="fill-current h-6 w-6" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <title>Close</title>
+                    <title>{{ t('contactUs.close') }}</title>
                     <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
                   </svg>
                 </span>
@@ -60,11 +60,11 @@
               <!-- Error Message -->
               <div v-if="errorMessage" class="flex justify-between bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-2 rounded" role="alert">
                 <span class="block sm:inline">
-                  <strong class="font-bold">Error:</strong> {{ errorMessage }}
+                  <strong class="font-bold">{{ t('contactUs.error') }}</strong>
                 </span>
                 <span class="cursor-pointer" @click="errorMessage = null">
                   <svg class="fill-current h-6 w-6" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <title>Close</title>
+                    <title>{{ t('contactUs.close') }}</title>
                     <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
                   </svg>
                 </span>
@@ -73,17 +73,17 @@
               <form @submit.prevent="submitForm" class="mt-24">
                 <input v-model="formData.name" type="text"
                   class="w-full h-14 text-gray-600 placeholder-gray-400 shadow-sm bg-transparent text-lg font-normal leading-7 rounded-full border border-gray-200 focus:outline-none pl-4 mb-6"
-                  :placeholder="t('contactUs.name')" :class="{'border-red-500': errors.name}" />
+                  :placeholder="t('contactUs.namePlaceholder')" :class="{'border-red-500': errors.name}" />
                 <span v-if="errors.name" class="text-red-500">{{ errors.name }}</span>
 
                 <input v-model="formData.email" type="email"
                   class="w-full h-14 text-gray-600 placeholder-gray-400 shadow-sm bg-transparent text-lg font-normal leading-7 rounded-full border border-gray-200 focus:outline-none pl-4 mb-6"
-                  :placeholder="t('contactUs.email')" :class="{'border-red-500': errors.email}" />
+                  :placeholder="t('contactUs.emailPlaceholder')" :class="{'border-red-500': errors.email}" />
                 <span v-if="errors.email" class="text-red-500">{{ errors.email }}</span>
 
                 <textarea v-model="formData.feedback" cols="6" rows="4"
                   class="w-full text-gray-600 placeholder-gray-400 bg-transparent text-lg shadow-sm font-normal leading-6 rounded-3xl border border-gray-200 focus:outline-none p-4 mb-6"
-                  :placeholder="t('contactUs.message')" :class="{'border-red-500': errors.feedback}"></textarea>
+                  :placeholder="t('contactUs.messagePlaceholder')" :class="{'border-red-500': errors.feedback}"></textarea>
                 <span v-if="errors.feedback" class="text-red-500">{{ errors.feedback }}</span>
 
                 <button type="submit"
@@ -112,10 +112,9 @@ import { ref } from 'vue';
 import axios from 'axios';
 import SocialMediaComponent from '@/components/SocialMediaComponent.vue';
 import { useI18n } from 'vue-i18n';
+import { BASE_URL } from '@/config';
 
 const { t } = useI18n();
-
-import { BASE_URL } from '@/config';
 
 const formData = ref({
   name: '',
@@ -136,7 +135,7 @@ const validateForm = () => {
   let isValid = true;
 
   if (!formData.value.name) {
-    errors.value.name = 'Name is required';
+    errors.value.name = t('contactUs.validation.nameRequired');
     isValid = false;
     hideErrorAfterDelay('name');
   } else {
@@ -144,11 +143,11 @@ const validateForm = () => {
   }
 
   if (!formData.value.email) {
-    errors.value.email = 'Email is required';
+    errors.value.email = t('contactUs.validation.emailRequired');
     isValid = false;
     hideErrorAfterDelay('email');
   } else if (!/\S+@\S+\.\S+/.test(formData.value.email)) {
-    errors.value.email = 'Email must be a valid email address';
+    errors.value.email = t('contactUs.validation.emailInvalid');
     isValid = false;
     hideErrorAfterDelay('email');
   } else {
@@ -156,7 +155,7 @@ const validateForm = () => {
   }
 
   if (!formData.value.feedback) {
-    errors.value.feedback = 'Message is required';
+    errors.value.feedback = t('contactUs.validation.messageRequired');
     isValid = false;
     hideErrorAfterDelay('feedback');
   } else {
@@ -180,7 +179,7 @@ const submitForm = async () => {
   try {
     const response = await axios.post(`${BASE_URL}/feedbacks`, formData.value);
 
-    successMessage.value = 'Your message has been sent successfully!';
+    successMessage.value = t('contactUs.success');
 
     // Reset form values after successful submission
     formData.value.name = '';
@@ -200,13 +199,13 @@ const submitForm = async () => {
 const handleError = (error) => {
   if (error.response) {
     console.error('Server responded with an error:', error.response.data);
-    errorMessage.value = `Error: ${error.response.data.message || 'An error occurred while submitting the form.'}`;
+    errorMessage.value = `Error: ${error.response.data.message || t('contactUs.error')}`;
   } else if (error.request) {
     console.error('No response received:', error.request);
-    errorMessage.value = 'No response from the server. Please check your network connection and try again.';
+    errorMessage.value = t('contactUs.error');
   } else {
     console.error('Error setting up request:', error.message);
-    errorMessage.value = `An error occurred: ${error.message}`;
+    errorMessage.value = `${t('contactUs.error')} ${error.message}`;
   }
 
   // Clear the error message after a few seconds

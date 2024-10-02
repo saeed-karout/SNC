@@ -7,16 +7,25 @@
         "contact": "Contact Us",
         "projects": "Projects"
     },
+   
     "contactUs": {
-        "title": "Contact Us",
-        "subtitle": "Send Us A Message",
-        "name": "Name",
-        "email": "Email",
-        "message": "Message",
-        "location": " Saudi Arabia,Riyadh, Al Rawdah District, Abu Al Darda Street",
-        "phone": "+966 5044 51484",
-        "submit": "Send"
-    },
+    "title": "Contact Us",
+    "subtitle": "Send Us A Message",
+    "phone": "+966 5044 51484",
+    "email": "Email",
+    "location": " Saudi Arabia,Riyadh, Al Rawdah District, Abu Al Darda Street",
+    "submit": "Send",
+    "namePlaceholder": "Your Name",
+    "emailPlaceholder": "Your Email",
+    "messagePlaceholder": "Your Message",
+    "success": "Your message has been sent successfully!",
+    "error": "An error occurred while submitting your message.",
+    "validation": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Email must be a valid email address",
+      "messageRequired": "Message is required"
+    }},
     "projects": {
         "title": "projects",
         "subtitle": "المشاريع التي تم تنفيذها من قبل شركة شمنت",
@@ -41,19 +50,27 @@
         },
         "section1":{
             "title":"CEO Message :",
-            "content":"I am pleased to welcome you to the website of Shabaka Al Sham Contracting Establishment on the Internet, where we have taken care to include the best international specifications in terms of ease of browsing and covering all information and developments about the establishment and its activities, and additional information of general benefit to all visitors to the site. We assure our customers that Shabaka Al Sham Contracting Establishment continues its endeavor, as a national institution, to achieve excellence in all its work. The series of successes achieved by Shabaka Al Sham Contracting Establishment lies, thanks to God first, and then to the dedication of the management and employees in serving its customers and implementing projects at the highest level of professionalism and performance. As I welcome you again to our website, I hope that you will continue to communicate with us at all times, and we will highly appreciate your comments and opinions on everything that would strengthen our relations. CEO Eng. Abdul Hakim Darwish Hijazi",
+            "content":"I am pleased to welcome you to the website of Shabaka Al Sham Contracting Establishment on the Internet, where we have taken care to include the best international specifications in terms of ease of browsing and covering all information and developments about the establishment and its activities, and additional information of general benefit to all visitors to the site. We assure our customers that Shabaka Al Sham Contracting Establishment continues its endeavor, as a national company, to achieve excellence in all its work. The series of successes achieved by Shabaka Al Sham Contracting Establishment lies, thanks to God first, and then to the dedication of the management and employees in serving its customers and implementing projects at the highest level of professionalism and performance. As I welcome you again to our website, I hope that you will continue to communicate with us at all times, and we will highly appreciate your comments and opinions on everything that would strengthen our relations. CEO Eng. Abdul Hakim Darwish Hijazi",
             "subtitle":"Chief Executive Officer :",
             "name":"MR.khaled Hijazi"
         },
         "section2":{
-            "title":"Sham Network Contracting Establishment :",
-            "content":"Sham Network Contracting Establishment was established in 2004 AD and contributed to supporting the urban renaissance within the Kingdom, and providing the best services in the field of contracting for private sector projects. Thanks to God Almighty and those in charge of managing this establishment and the effectiveness of positive cooperation with the administrative and technical team, we are taking steady steps to establish a place among the major contracting establishments to keep pace with the urban growth and develop human resources, competencies and expertise necessary for the renaissance of our beloved Kingdom."
+            "title":"Sham Company  Contracting Establishment :",
+            "content":"Sham Company Contracting Establishment was established in 2004 AD and contributed to supporting the urban renaissance within the Kingdom, and providing the best services in the field of contracting for private sector projects. Thanks to God Almighty and those in charge of managing this establishment and the effectiveness of positive cooperation with the administrative and technical team, we are taking steady steps to establish a place among the major contracting establishments to keep pace with the urban growth and develop human resources, competencies and expertise necessary for the renaissance of our beloved Kingdom."
         },
         "section3":{
             "title":"Foundation objectives :",
             "content":"Implementing the required projects with the best competitive quality. Contributing to providing practical, scientific and technical expertise. Striving to achieve international quality standards with qualified local cadres.",
             "title2":"Future vision :",
-            "content2":"Sham Network Contracting Company has developed an ambitious business plan that focuses on the company’s capabilities by: Occupying the leading position among contracting companies by implementing contracting works quickly and with high specifications. Using modern methods and technology in projects instead of traditional methods. Introducing modern systems and processes to ensure quality, efficiency and customer satisfaction."
+            "content2":"Sham Company Contracting Company has developed an ambitious business plan that focuses on the company’s capabilities by: Occupying the leading position among contracting companies by implementing contracting works quickly and with high specifications. Using modern methods and technology in projects instead of traditional methods. Introducing modern systems and processes to ensure quality, efficiency and customer satisfaction."
+        },
+         "section4":{
+            "title":" What makes us different :",
+            "content":"Because we believe that housing today is an investment in people and their future, we have adopted sustainability standards and smart solutions that improve the quality of living in our model residential communities, the efficiency of services provided to their residents, and the achievement of Vision 2030.",
+            "title2":" Our message :",
+            "content2":"We invest in innovative construction technologies and local content to enhance lifestyle.",
+            "title3":"Our values",
+            "content3":"Respect, Integrity, Quality, Commitment and Social Responsibility"
         }
     },
     "slogans": {
