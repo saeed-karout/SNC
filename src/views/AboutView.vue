@@ -269,16 +269,22 @@ onMounted(() => {
     }
   }
 });
+import img from "../assets/1.png"
+import img2 from "../assets/2.png"
+import img3 from "../assets/3.png"
+import img4 from "../assets/4.png"
+import img5 from "../assets/5.png"
 
 // ** التعديلات الجديدة لعرض الصور في نافذة منبثقة **
 // مصفوفة الصور
 const images = ref([
-  { src: "../src/assets/certificate/1.png", alt: "شهادة 1" },
-  { src: "../src/assets/certificate/2.png", alt: "شهادة 2" },
-  { src: "../src/assets/certificate/3.png", alt: "شهادة 3" },
-  { src: "../src/assets/certificate/4.png", alt: "شهادة 4a" },
-  { src: "../src/assets/certificate/5.png", alt: "شهادة 4b" },
+  { src: img, alt: "شهادة 1" },
+  { src: img2, alt: "شهادة 2" },
+  { src: img3, alt: "شهادة 3" },
+  { src: img4, alt: "شهادة 4a" },
+  { src: img5, alt: "شهادة 4b" },
 ]);
+
 
 // متغيرات التحكم في النافذة المنبثقة
 const isModalOpen = ref(false);

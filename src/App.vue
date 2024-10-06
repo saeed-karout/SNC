@@ -5,7 +5,8 @@
     <RouterView />
     <FooterComponent />
     <UpToTopCom />
-    <TawkToWidget />
+    <!-- عرض TawkToWidget فقط في صفحة "Contact Us" -->
+    <TawkToWidget v-if="isContactUsPage" />
     <CookieConsent 
       v-if="showCookieConsent" 
       :message="$t('cookieConsent.message')" 
@@ -74,4 +75,7 @@ const currentDir = computed(() => {
 const currentDirClass = computed(() => {
   return locale.value === 'ar' ? 'text-right' : 'text-left'
 })
+
+// تحديد ما إذا كان المستخدم في صفحة "Contact Us"
+const isContactUsPage = computed(() => route.path === '/contact')
 </script>

@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import { onMounted, watch, ref } from 'vue';
+import { onMounted, watch, ref, onBeforeUnmount, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useCookieConsent } from '../../composables/useCookieConsent';
 
@@ -13,8 +13,11 @@ const { isConsentGiven } = useCookieConsent();
 
 const isScriptLoaded = ref(false);
 
+// تحديد ما إذا كان المستخدم في صفحة "Contact Us"
+const isContactUsPage = computed(() => route.path === '/contact');
+
 const loadTawkToScript = () => {
-  if (!isScriptLoaded.value && isConsentGiven.value) { // إزالة شرط المسار
+  if (!isScriptLoaded.value && isConsentGiven.value && isContactUsPage.value) {
     window.Tawk_API = window.Tawk_API || {};
     window.Tawk_LoadStart = new Date();
 
@@ -25,45 +28,44 @@ const loadTawkToScript = () => {
     scriptElement.setAttribute('crossorigin', '*');
     scriptElement.onload = () => {
       isScriptLoaded.value = true;
-      setWidgetVisibility(route.path);
+      setWidgetVisibility();
     };
     document.body.appendChild(scriptElement);
   }
 };
 
-const setWidgetVisibility = (path) => {
+const setWidgetVisibility = () => {
   if (window.Tawk_API && window.Tawk_API.showWidget && window.Tawk_API.hideWidget) {
-    window.Tawk_API.showWidget(); // إظهار الودجت في جميع الصفحات
+    if (isContactUsPage.value) {
+      window.Tawk_API.showWidget(); // إظهار الودجت في صفحة "Contact Us"
+    } else {
+      window.Tawk_API.hideWidget(); // إخفاء الودجت في الصفحات الأخرى
+    }
   }
 };
 
 onMounted(() => {
-  // تحميل السكربت إذا تمت الموافقة
   loadTawkToScript();
 
-  // مراقبة التغييرات في حالة الموافقة
+  // مراقبة التغييرات في حالة الموافقة والمسار
   watch(
-    () => isConsentGiven.value,
-    (isAllowed) => {
-      if (isAllowed && !isScriptLoaded.value) {
+    () => [isConsentGiven.value, route.path],
+    ([consent, path]) => {
+      if (consent && path === '/contact' && !isScriptLoaded.value) {
         loadTawkToScript();
-      } else if (!isAllowed && isScriptLoaded.value) {
-        if (window.Tawk_API && window.Tawk_API.hideWidget) {
-          window.Tawk_API.hideWidget();
-        }
-        // لا يمكن إزالة السكربت بسهولة بعد تحميله، لكن يمكن تجاهل استخدامه
+      } else if (window.Tawk_API) {
+        setWidgetVisibility();
       }
     },
     { immediate: true }
   );
+});
 
-  // مراقبة التغييرات في المسار لضبط ظهور الودجت
-  watch(
-    () => route.path,
-    (newPath) => {
-      setWidgetVisibility(newPath);
-    }
-  );
+// إخفاء الودجت عند إزالة المكون من العرض
+onBeforeUnmount(() => {
+  if (window.Tawk_API && window.Tawk_API.hideWidget) {
+    window.Tawk_API.hideWidget();
+  }
 });
 </script>
 

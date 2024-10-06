@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import LandingScreen from '../master/LandingScreen.vue';
 import { BASE_URL } from '@/config';
@@ -18,7 +18,9 @@ const route = useRoute();
 const router = useRouter();
 const { locale, t } = useI18n();
 
-const isImageLoading = ref(true);
+// متغيرات حالة تحميل الصور
+const isMainImageLoading = ref(true);
+const thumbnailImageLoading = ref({});
 
 // تحديث عرض الشاشة عند تغيير الحجم
 window.addEventListener('resize', () => {
@@ -79,12 +81,40 @@ async function goToProject(projectId) {
         selectedImage.value = selectedProject.value.images ? selectedProject.value.images[0] : null;
         router.push(`/projects/${projectId}`);
         console.log('Selected project:', selectedProject.value);
+
+        // تهيئة حالة تحميل الصورة الرئيسية
+        isMainImageLoading.value = true;
+
+        // تهيئة حالات تحميل الصور المصغرة
+        thumbnailImageLoading.value = {};
+        if (selectedProject.value.images) {
+            selectedProject.value.images.forEach((image) => {
+                thumbnailImageLoading.value[image] = true;
+            });
+        }
     } catch (error) {
         console.error('Error fetching project details:', error);
         selectedProject.value = null; // تعيين null في حالة الخطأ
     } finally {
         loading.value = false;
         isSidebarVisible.value = false;
+    }
+}
+
+// إضافة مستمع للوحة المفاتيح عند تحميل المكون
+onMounted(() => {
+    window.addEventListener('keydown', handleKeyPress);
+});
+
+// إزالة المستمع عند تدمير المكون لتجنب تسرب الذاكرة
+onUnmounted(() => {
+    window.removeEventListener('keydown', handleKeyPress);
+});
+
+// دالة التعامل مع ضغطات المفاتيح
+function handleKeyPress(event) {
+    if (event.key === 'Escape' && isFullscreen.value) {
+        toggleFullscreen(); // الخروج من وضع الشاشة الكاملة عند الضغط على Esc
     }
 }
 
@@ -95,7 +125,7 @@ function toggleSidebar() {
 function selectImage(image) {
     if (image) {
         selectedImage.value = image;
-        isImageLoading.value = true;
+        isMainImageLoading.value = true;
     } else {
         console.error('Selected image is null or undefined');
     }
@@ -110,7 +140,7 @@ function prevImage() {
     const index = selectedProject.value.images.indexOf(selectedImage.value);
     if (index > 0) {
         selectedImage.value = selectedProject.value.images[index - 1];
-        isImageLoading.value = true;
+        isMainImageLoading.value = true;
     }
 }
 
@@ -119,7 +149,7 @@ function nextImage() {
     const index = selectedProject.value.images.indexOf(selectedImage.value);
     if (index < selectedProject.value.images.length - 1) {
         selectedImage.value = selectedProject.value.images[index + 1];
-        isImageLoading.value = true;
+        isMainImageLoading.value = true;
     }
 }
 
@@ -194,27 +224,36 @@ watch(locale, () => {
                     <!-- Main Image -->
                     <div class="flex-1 relative">
                         <div class="cursor-pointer" @click="toggleFullscreen">
-                            <!-- عنصر تحميل الصورة -->
-                            <div v-if="isImageLoading"
-                                class="rounded-md h-12 w-12 border-4 border-t-4 border-secondary animate-spin absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                            <!-- عنصر تحميل الصورة الرئيسية -->
+                            <div v-if="isMainImageLoading"
+                                class="rounded-md h-12 w-12 border-4 border-t-4 border-secondary animate-spin  ">
                             </div>
 
                             <!-- صورة المشروع الرئيسية -->
                             <img v-if="selectedImage" :src="selectedImage" loading="lazy" :alt="selectedProject.name"
                                 class="w-full h-[300px] lg:h-[500px] object-cover rounded-lg shadow-lg"
-                                @load="isImageLoading = false" @error="isImageLoading = false"
-                                @loadstart="isImageLoading = true" />
+                                @load="isMainImageLoading = false" @error="isMainImageLoading = false"
+                                @loadstart="isMainImageLoading = true" />
                         </div>
 
                         <!-- الصور المصغرة -->
                         <div class="mt-4 flex flex-wrap justify-center gap-2">
-                            <img v-for="(image, index) in selectedProject.images" :key="index"
-                                :src="image" :alt="`${selectedProject.name} - ${index + 1}`"
-                                @click="selectImage(image)"
-                                :class="{ 'border-2 border-[#B99269]': selectedImage === image }"
-                                class="w-16 h-16 lg:w-24 lg:h-24 object-cover rounded-md cursor-pointer transition-transform transform hover:scale-105"
-                                loading="lazy" @load="isImageLoading = false" @error="isImageLoading = false"
-                                @loadstart="isImageLoading = true" />
+                            <div v-for="(image, index) in selectedProject.images" :key="index" class="relative">
+                                <!-- عنصر تحميل الصورة المصغرة -->
+                                <div v-if="thumbnailImageLoading[image]"
+                                    class="rounded-md h-10 w-10 border-4 border-t-4 border-secondary animate-spin absolute top-0 left-0 flex items-center justify-center">
+                                </div>
+
+                                <!-- الصورة المصغرة -->
+                                <img :src="image" :alt="`${selectedProject.name} - ${index + 1}`"
+                                    @click="selectImage(image)"
+                                    :class="{ 'border-2 border-[#B99269]': selectedImage === image }"
+                                    class="w-16 h-16 lg:w-24 lg:h-24 object-cover rounded-md cursor-pointer transition-transform transform hover:scale-105"
+                                    loading="lazy"
+                                    @load="thumbnailImageLoading[image] = false"
+                                    @error="thumbnailImageLoading[image] = false"
+                                    @loadstart="thumbnailImageLoading[image] = true" />
+                            </div>
                         </div>
                     </div>
 
@@ -265,158 +304,166 @@ watch(locale, () => {
 </template>
 
 <style scoped>
-    /* Fullscreen Image View */
-    .fullscreen-image {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 999999999999999;
-        background-color: rgba(0, 0, 0, 0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+/* Fullscreen Image View */
+.fullscreen-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999999999999999;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-    .fullscreen-image img {
-        max-width: 95%;
-        max-height: 95%;
-        border-radius: 8px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-    }
+.fullscreen-image img {
+    max-width: 95%;
+    max-height: 95%;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
 
-    /* Sidebar تنسيقات */
+/* Sidebar تنسيقات */
+.fixedSidebar {
+    position: fixed;
+    top: 11.5%;
+    left: 0;
+    height: 90vh;
+    width: 16rem;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    z-index: 50;
+    overflow-y: auto;
+    --sb-track-color: #34505d;
+    --sb-thumb-color: #314351;
+    --sb-size: 5px;
+}
+
+.fixedSidebar::-webkit-scrollbar {
+    width: var(--sb-size);
+}
+
+.fixedSidebar::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 10px;
+}
+
+.fixedSidebar::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 10px;
+    border: 8px solid #c7a887;
+}
+
+@supports not selector(::-webkit-scrollbar) {
     .fixedSidebar {
-        position: fixed;
-        top: 11.5%;
-        left: 0;
-        height: 90vh;
-        width: 16rem;
-        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-        z-index: 50;
-        overflow-y: auto;
-        --sb-track-color: #34505d;
-        --sb-thumb-color: #314351;
-        --sb-size: 5px;
+        scrollbar-color: var(--sb-thumb-color) var (--sb-track-color);
     }
+}
 
-    .fixedSidebar::-webkit-scrollbar {
-        width: var(--sb-size);
-    }
+:root {
+    --sb-track-color: #c7a887;
+    --sb-thumb-color: #314351;
+    --sb-size: 5px;
+}
 
-    .fixedSidebar::-webkit-scrollbar-track {
-        background: var(--sb-track-color);
-        border-radius: 10px;
-    }
+/* زر فتح وإغلاق الـ Sidebar */
+button {
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+}
 
-    .fixedSidebar::-webkit-scrollbar-thumb {
-        background: var(--sb-thumb-color);
-        border-radius: 10px;
-        border: 8px solid #c7a887;
-    }
+button:hover {
+    opacity: 0.9;
+}
 
-    @supports not selector(::-webkit-scrollbar) {
-        .fixedSidebar {
-            scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
-        }
-    }
+button.is-sidebar-closed {
+    padding: 0.5rem;
+    position: fixed;
+    top: 15%;
+    left: 4%;
+    z-index: 100;
+    background-color: #BB936A;
+    color: white;
+    border-radius: 20px;
+    text-align: center;
+}
 
-    :root {
-        --sb-track-color: #c7a887;
-        --sb-thumb-color: #314351;
-        --sb-size: 5px;
-    }
+.project-box {
+    box-shadow: 1px 3px 35px 0px #293340;
+    padding: 20px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+}
 
-    /* زر فتح وإغلاق الـ Sidebar */
-    button {
-        border: none;
-        cursor: pointer;
-        padding: 0.5rem 0.75rem;
-    }
+.dark .project-box {
+    box-shadow: 1px 3px 35px 0px #BB936A;
+}
 
-    button:hover {
-        opacity: 0.9;
-    }
+button.active {
+    background-color: #4a4a4a;
+    color: white;
+}
 
-    button.is-sidebar-closed {
-        padding: 0.5rem;
-        position: fixed;
-        top: 15%;
-        left: 4%;
-        z-index: 100;
-        background-color: #BB936A;
-        color: white;
-        border-radius: 20px;
-        text-align: center;
-    }
+.custom-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    width: 100px;
+    height: 50px;
+    border-radius: 8px;
+    font-size: 18px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 50;
+}
 
-    .project-box {
-        box-shadow: 1px 3px 35px 0px #293340;
-        padding: 20px;
-        margin-top: 100px;
-        margin-bottom: 50px;
-    }
+.fa-icon {
+    font-size: 24px;
+    margin-bottom: 5px;
+}
 
-    .dark .project-box {
-        box-shadow: 1px 3px 35px 0px #BB936A;
-    }
-
-    button.active {
-        background-color: #4a4a4a;
-        color: white;
-    }
-
+/* شاشات الجوال */
+@media (max-width: 768px) {
     .custom-btn {
-        position: fixed;
-        top: 16px;
-        left: 16px;
-        width: 100px;
+        width: 50px;
         height: 50px;
-        border-radius: 8px;
-        font-size: 18px;
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        z-index: 50;
     }
 
     .fa-icon {
-        font-size: 24px;
-        margin-bottom: 5px;
+        font-size: 20px;
+    }
+}
+
+/* شاشات العرض الكبيرة */
+@media (min-width: 768px) {
+    .custom-btn {
+        width: 120px;
+        height: 70px;
+        left: 16px;
+        top: 16px;
     }
 
-    /* شاشات الجوال */
-    @media (max-width: 768px) {
-        .custom-btn {
-            width: 50px;
-            height: 50px;
-        }
-
-        .fa-icon {
-            font-size: 20px;
-        }
+    .fa-icon {
+        font-size: 28px;
     }
+}
 
-    /* شاشات العرض الكبيرة */
-    @media (min-width: 768px) {
-        .custom-btn {
-            width: 120px;
-            height: 70px;
-            left: 16px;
-            top: 16px;
-        }
+/* عنصر تحميل الصورة */
+img {
+    position: relative;
+}
 
-        .fa-icon {
-            font-size: 28px;
-        }
-    }
+.relative {
+    position: relative;
+}
 
-    /* عنصر تحميل الصورة */
-    img {
-        position: relative;
-    }
+.absolute {
+    position: absolute;
+}
 </style>
